@@ -1,5 +1,6 @@
 // To add a question: create a .md file in src/questions and add an entry here.
 // Tags are made automatically from the answer's '## ' section headings.
+// category: an id from categories.js (defaults to 'react-js').
 import { getSections } from '../utils/sections.js'
 import useStateVsUseRef from '../questions/usestate-vs-useref.md?raw'
 import liftingStateUp from '../questions/lifting-state-up.md?raw'
@@ -108,6 +109,7 @@ const questions = [
 ]
 
 for (const q of questions) {
+  q.category ??= 'react-js'
   q.sections = getSections(q.content)
 }
 

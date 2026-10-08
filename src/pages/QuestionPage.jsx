@@ -2,7 +2,8 @@ import { useEffect } from 'react'
 import { Link, useLocation, useParams, useSearchParams } from 'react-router'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import questions from '../data/questions.js'
+import allQuestions from '../data/questions.js'
+import categories from '../data/categories.js'
 import Tag from '../components/Tag.jsx'
 import { slugify } from '../utils/sections.js'
 
@@ -27,8 +28,12 @@ function QuestionPage() {
   const section = searchParams.get('section')
   const { key } = useLocation() // changes on every click, so tapping the same tag scrolls again
 
-  const index = questions.findIndex((q) => q.id === id)
-  const question = questions[index]
+  const question = allQuestions.find((q) => q.id === id)
+  const category = categories.find((c) => c.id === question?.category)
+
+  // previous / next stay inside the same category
+  const questions = allQuestions.filter((q) => q.category === question?.category)
+  const index = questions.indexOf(question)
   const prev = questions[index - 1]
   const next = questions[index + 1]
 
@@ -55,8 +60,8 @@ function QuestionPage() {
 
   return (
     <article>
-      <Link to="/" className="text-sm text-blue-600 hover:underline">
-        ← All questions
+      <Link to={`/?cat=${question.category}`} className="text-sm text-blue-600 hover:underline">
+        ← {category?.title ?? 'All questions'}
       </Link>
 
       <h1 className="mt-4 text-2xl font-bold text-gray-900 sm:text-3xl">{question.title}</h1>
