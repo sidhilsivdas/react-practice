@@ -12,6 +12,10 @@ import reactCompiler from '../questions/react-compiler.md?raw'
 import spreadRest from '../questions/spread-rest.md?raw'
 import strictMode from '../questions/strict-mode.md?raw'
 import react18And19 from '../questions/react-18-19.md?raw'
+import typeCoercion from '../questions/type-coercion.md?raw'
+import thisKeyword from '../questions/this-keyword.md?raw'
+import eventLoopBrowser from '../questions/event-loop-browser.md?raw'
+import eventLoopNode from '../questions/event-loop-node.md?raw'
 
 const questions = [
   {
@@ -68,6 +72,26 @@ const questions = [
     id: 'react-18-19',
     title: 'React 18 & 19 features',
     content: react18And19,
+  },
+  {
+    id: 'type-coercion',
+    title: 'Type coercion (== vs ===, truthy & falsy)',
+    content: typeCoercion,
+  },
+  {
+    id: 'this-keyword',
+    title: 'The this keyword',
+    content: thisKeyword,
+  },
+  {
+    id: 'event-loop-browser',
+    title: 'JavaScript event loop (browser): macro & micro tasks',
+    content: eventLoopBrowser,
+  },
+  {
+    id: 'event-loop-node',
+    title: 'Node.js event loop phases (timers, poll, check)',
+    content: eventLoopNode,
   },
 ]
 
