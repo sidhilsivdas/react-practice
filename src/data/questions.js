@@ -16,6 +16,8 @@ import typeCoercion from '../questions/type-coercion.md?raw'
 import thisKeyword from '../questions/this-keyword.md?raw'
 import eventLoopBrowser from '../questions/event-loop-browser.md?raw'
 import eventLoopNode from '../questions/event-loop-node.md?raw'
+import mapFilterReduce from '../questions/map-filter-reduce.md?raw'
+import xssCsrf from '../questions/xss-csrf.md?raw'
 
 const questions = [
   {
@@ -92,6 +94,16 @@ const questions = [
     id: 'event-loop-node',
     title: 'Node.js event loop phases (timers, poll, check)',
     content: eventLoopNode,
+  },
+  {
+    id: 'map-filter-reduce',
+    title: 'map, filter & reduce',
+    content: mapFilterReduce,
+  },
+  {
+    id: 'xss-csrf',
+    title: 'XSS, CSRF & DOMPurify (with real-world attacks)',
+    content: xssCsrf,
   },
 ]
 
