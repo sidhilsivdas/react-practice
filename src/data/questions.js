@@ -9,6 +9,7 @@ import diffingComplexity from '../questions/diffing-complexity.md?raw'
 import reactFiber from '../questions/react-fiber.md?raw'
 import reRenderCauses from '../questions/re-render-causes.md?raw'
 import memoUseCallback from '../questions/memo-usecallback.md?raw'
+import customHooks from '../questions/custom-hooks.md?raw'
 import reactCompiler from '../questions/react-compiler.md?raw'
 import spreadRest from '../questions/spread-rest.md?raw'
 import strictMode from '../questions/strict-mode.md?raw'
@@ -19,6 +20,7 @@ import eventLoopBrowser from '../questions/event-loop-browser.md?raw'
 import eventLoopNode from '../questions/event-loop-node.md?raw'
 import mapFilterReduce from '../questions/map-filter-reduce.md?raw'
 import xssCsrf from '../questions/xss-csrf.md?raw'
+import authFlow from '../questions/auth-flow.md?raw'
 
 const questions = [
   {
@@ -55,6 +57,11 @@ const questions = [
     id: 'memo-usecallback',
     title: 'React.memo + useCallback',
     content: memoUseCallback,
+  },
+  {
+    id: 'custom-hooks',
+    title: 'Custom hooks: useWindowSize, useDebounce & more (step by step)',
+    content: customHooks,
   },
   {
     id: 'react-compiler',
@@ -105,6 +112,11 @@ const questions = [
     id: 'xss-csrf',
     title: 'XSS, CSRF & DOMPurify (with real-world attacks)',
     content: xssCsrf,
+  },
+  {
+    id: 'auth-flow',
+    title: 'Auth flow: protected routes, axios interceptors & refresh tokens',
+    content: authFlow,
   },
 ]
 
