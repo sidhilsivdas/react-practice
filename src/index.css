@@ -1,1 +1,14 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* inline code in answers: grey pill instead of backticks */
+.prose :where(code):not(:where(pre *))::before,
+.prose :where(code):not(:where(pre *))::after {
+  content: none;
+}
+.prose :where(code):not(:where(pre *)) {
+  background: var(--color-gray-100);
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.35rem;
+  font-weight: 500;
+}
