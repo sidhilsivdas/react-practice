@@ -11,4 +11,5 @@
   border-radius: 0.25rem;
   padding: 0.1rem 0.35rem;
   font-weight: 500;
+  overflow-wrap: anywhere; /* long code like a(b(c(d))) wraps instead of widening the page on phones */
 }

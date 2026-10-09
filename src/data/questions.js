@@ -21,6 +21,15 @@ import eventLoopNode from '../questions/event-loop-node.md?raw'
 import mapFilterReduce from '../questions/map-filter-reduce.md?raw'
 import xssCsrf from '../questions/xss-csrf.md?raw'
 import authFlow from '../questions/auth-flow.md?raw'
+import jsxKeys from '../questions/jsx-keys.md?raw'
+import stateProps from '../questions/state-props.md?raw'
+import useStateUseEffect from '../questions/usestate-useeffect.md?raw'
+import classVsFunction from '../questions/class-vs-function.md?raw'
+import childStateRefs from '../questions/child-state-refs.md?raw'
+import bigLists from '../questions/big-lists.md?raw'
+import redux from '../questions/redux.md?raw'
+import reactRouter from '../questions/react-router.md?raw'
+import useLocationQ from '../questions/uselocation.md?raw'
 
 const questions = [
   {
@@ -117,6 +126,51 @@ const questions = [
     id: 'auth-flow',
     title: 'Auth flow: protected routes, axios interceptors & refresh tokens',
     content: authFlow,
+  },
+  {
+    id: 'jsx-keys',
+    title: 'JSX & keys (why keys matter for performance)',
+    content: jsxKeys,
+  },
+  {
+    id: 'state-props',
+    title: 'State vs props, controlled vs uncontrolled, prop drilling',
+    content: stateProps,
+  },
+  {
+    id: 'usestate-useeffect',
+    title: 'useState & useEffect must-knows (how cleanup works)',
+    content: useStateUseEffect,
+  },
+  {
+    id: 'class-vs-function',
+    title: 'Class vs function components (lifecycle vs hooks)',
+    content: classVsFunction,
+  },
+  {
+    id: 'child-state-refs',
+    title: 'Accessing child state: useRef & useImperativeHandle',
+    content: childStateRefs,
+  },
+  {
+    id: 'big-lists',
+    title: 'Big lists: infinite scroll & virtualization',
+    content: bigLists,
+  },
+  {
+    id: 'redux',
+    title: 'Redux & Redux Toolkit (step by step)',
+    content: redux,
+  },
+  {
+    id: 'react-router',
+    title: 'React Router: how it works',
+    content: reactRouter,
+  },
+  {
+    id: 'uselocation',
+    title: 'useLocation: query params & navigation state',
+    content: useLocationQ,
   },
 ]
 
