@@ -5,11 +5,27 @@
 //    { args: [...], expected }               → calls fn(...args)
 //    { label, run: '...code...', expected }  → an async script using the function by name
 //                                             (for callbacks, timers, promises, classes)
+//
+// HTML & CSS practice (type: 'html') uses <id>.starter.html + <id>.starter.css instead,
+// and `checks`: { label, run } where run gets (doc, win, setViewport) and returns
+// true to pass, or a string explaining what's wrong (see utils/runHtmlChecks.js).
 import { getSections } from '../utils/sections.js'
 
-// every src/coding/*.md and *.starter.js file, as text
+// every src/coding/*.md and starter file, as text
+// (Vite reads these options at build time, so they must be written inline)
 const markdown = import.meta.glob('../coding/*.md', { query: '?raw', import: 'default', eager: true })
 const starters = import.meta.glob('../coding/*.starter.js', { query: '?raw', import: 'default', eager: true })
+const starterHtml = import.meta.glob('../coding/*.starter.html', { query: '?raw', import: 'default', eager: true })
+const starterCss = import.meta.glob('../coding/*.starter.css', { query: '?raw', import: 'default', eager: true })
+
+// helpers available inside HTML & CSS checks
+const BOX = `const rect = (selector) => {
+  const el = doc.querySelector(selector)
+  if (!el) throw new Error('Could not find ' + selector + ' in the HTML')
+  return el.getBoundingClientRect()
+}
+const style = (selector) => win.getComputedStyle(doc.querySelector(selector))
+`
 
 const SOLUTION_MARKER = '<!-- SOLUTION -->'
 const WAIT = 'const wait = (ms) => new Promise((r) => setTimeout(r, ms))\n'
@@ -469,12 +485,151 @@ return log`,
       },
     ],
   },
+
+  // ---------- HTML & CSS practice ----------
+  {
+    id: 'center-a-div',
+    title: 'Center a div (every way)',
+    type: 'html',
+    category: 'html-css',
+    difficulty: 'Easy',
+    topics: ['Flexbox', 'Grid', 'Positioning', 'margin: auto'],
+    checks: [
+      {
+        label: '.box is centred horizontally',
+        run: `${BOX}const c = rect('.container'), b = rect('.box')
+const left = Math.round(b.left - c.left), right = Math.round(c.right - b.right)
+return Math.abs(left - right) <= 2 || 'Space on the left is ' + left + 'px and on the right ' + right + 'px. They should be equal.'`,
+      },
+      {
+        label: '.box is centred vertically',
+        run: `${BOX}const c = rect('.container'), b = rect('.box')
+const top = Math.round(b.top - c.top), bottom = Math.round(c.bottom - b.bottom)
+return Math.abs(top - bottom) <= 2 || 'Space above is ' + top + 'px and below ' + bottom + 'px. They should be equal.'`,
+      },
+      {
+        label: '.box keeps its size (120 × 80)',
+        run: `${BOX}const b = rect('.box')
+return (Math.abs(b.width - 120) <= 1 && Math.abs(b.height - 80) <= 1) || 'The box is ' + Math.round(b.width) + ' × ' + Math.round(b.height) + '. Keep it 120 × 80.'`,
+      },
+      {
+        label: '.container keeps its 300px height',
+        run: `${BOX}return style('.container').height === '300px' || 'The container is ' + style('.container').height + ' tall. Keep it at 300px.'`,
+      },
+      {
+        label: 'still centred when the container changes size (no hard-coded offsets)',
+        run: `${BOX}const container = doc.querySelector('.container')
+container.style.width = '500px'
+container.style.height = '420px'
+const c = rect('.container'), b = rect('.box')
+const dx = Math.round((b.left - c.left) - (c.right - b.right))
+const dy = Math.round((b.top - c.top) - (c.bottom - b.bottom))
+container.style.width = ''
+container.style.height = ''
+return (Math.abs(dx) <= 2 && Math.abs(dy) <= 2) || 'After resizing the container to 500 × 420 the box is off-centre by ' + dx + 'px horizontally and ' + dy + 'px vertically. Avoid fixed pixel margins.'`,
+      },
+    ],
+  },
+  {
+    id: 'responsive-card-grid',
+    title: 'Responsive card grid',
+    type: 'html',
+    category: 'html-css',
+    difficulty: 'Medium',
+    topics: ['Grid', 'Media queries', 'Responsive design'],
+    checks: [
+      {
+        label: 'wide screen (900px): 3 cards per row',
+        run: `await setViewport(900)
+const cards = [...doc.querySelectorAll('.card')].map((c) => c.getBoundingClientRect())
+const perRow = cards.filter((c) => Math.abs(c.top - cards[0].top) < 2).length
+return perRow === 3 || 'Found ' + perRow + ' card(s) in the first row at 900px. Expected 3.'`,
+      },
+      {
+        label: 'wide screen: the 3 columns are equal width',
+        run: `await setViewport(900)
+const cards = [...doc.querySelectorAll('.card')].map((c) => c.getBoundingClientRect())
+if (cards.filter((c) => Math.abs(c.top - cards[0].top) < 2).length !== 3) return 'First get 3 cards side by side in a row.'
+const w = cards.slice(0, 3).map((c) => Math.round(c.width))
+return (Math.max(...w) - Math.min(...w) <= 1) || 'Card widths are ' + w.join(', ') + 'px. They should be equal.'`,
+      },
+      {
+        label: 'wide screen: 16px gaps between cards',
+        run: `await setViewport(900)
+const c = [...doc.querySelectorAll('.card')].map((el) => el.getBoundingClientRect())
+if (c.filter((r) => Math.abs(r.top - c[0].top) < 2).length !== 3) return 'First get 3 cards side by side in a row.'
+const column = Math.round(c[1].left - c[0].right)
+const row = Math.round(c[3].top - c[0].bottom)
+return (Math.abs(column - 16) <= 1 && Math.abs(row - 16) <= 1) || 'Gap between columns is ' + column + 'px and between rows ' + row + 'px. Both should be 16px.'`,
+      },
+      {
+        label: 'phone (400px): 1 card per row',
+        run: `await setViewport(400)
+const c = [...doc.querySelectorAll('.card')].map((el) => el.getBoundingClientRect())
+const oneColumn = c.every((r) => Math.abs(r.left - c[0].left) < 2) && c[1].top >= c[0].bottom
+return oneColumn || 'At 400px the cards should stack in a single column.'`,
+      },
+      {
+        label: 'phone: cards take the full width',
+        run: `await setViewport(400)
+const grid = doc.querySelector('.grid').getBoundingClientRect()
+const card = doc.querySelector('.card').getBoundingClientRect()
+return Math.abs(card.width - grid.width) <= 1 || 'Cards are ' + Math.round(card.width) + 'px wide but the grid is ' + Math.round(grid.width) + 'px.'`,
+      },
+    ],
+  },
+  {
+    id: 'text-ellipsis',
+    title: 'Truncate text with an ellipsis (…)',
+    type: 'html',
+    category: 'html-css',
+    difficulty: 'Easy',
+    topics: ['text-overflow', 'line-clamp', 'Overflow'],
+    checks: [
+      {
+        label: '.title stays on one line',
+        run: `${BOX}const h = Math.round(rect('.title').height)
+return h <= 25 || '.title is ' + h + 'px tall (about ' + Math.round(h / 24) + ' lines). It should be one 24px line.'`,
+      },
+      {
+        label: '.title is cut off with an ellipsis',
+        run: `${BOX}const s = style('.title')
+const missing = []
+if (s.whiteSpace !== 'nowrap') missing.push('white-space: nowrap')
+if (s.overflowX !== 'hidden') missing.push('overflow: hidden')
+if (s.textOverflow !== 'ellipsis') missing.push('text-overflow: ellipsis')
+return missing.length === 0 || 'Missing on .title: ' + missing.join(', ')`,
+      },
+      {
+        label: 'keeps the original text and font sizes (the browser does the cutting)',
+        run: `${BOX}const title = doc.querySelector('.title')
+const sizes = style('.title').fontSize + ' / ' + style('.description').fontSize
+if (sizes !== '18px / 14px') return 'Font sizes are ' + sizes + '. Keep 18px for .title and 14px for .description.'
+return title.scrollWidth > title.clientWidth || 'The title fits without cutting. Keep the original text.'`,
+      },
+      {
+        label: '.description shows at most 2 lines',
+        run: `${BOX}const h = Math.round(rect('.description').height)
+return h <= 41 || '.description is ' + h + 'px tall (about ' + Math.round(h / 20) + ' lines). It should be at most two 20px lines.'`,
+      },
+      {
+        label: '.description still shows 2 full lines, cut with an ellipsis',
+        run: `${BOX}const d = doc.querySelector('.description')
+const h = Math.round(d.getBoundingClientRect().height)
+if (h < 39) return '.description is only ' + h + 'px tall. Show two full lines (40px).'
+if (style('.description').getPropertyValue('-webkit-line-clamp') !== '2') return 'Use -webkit-line-clamp: 2 so the browser adds the "…".'
+return d.scrollHeight > d.clientHeight || 'The text should be longer than two lines and get cut off.'`,
+      },
+    ],
+  },
 ]
 
 for (const problem of coding) {
   problem.category ??= 'react-js'
   problem.content = markdown[`../coding/${problem.id}.md`]
   problem.starter = starters[`../coding/${problem.id}.starter.js`]
+  problem.starterHtml = starterHtml[`../coding/${problem.id}.starter.html`]
+  problem.starterCss = starterCss[`../coding/${problem.id}.starter.css`]
   const [problemPart, solutionPart = ''] = problem.content.split(SOLUTION_MARKER)
   problem.problem = problemPart
   problem.solution = solutionPart

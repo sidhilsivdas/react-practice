@@ -6,6 +6,7 @@ import Tag from '../components/Tag.jsx'
 import MarkdownContent from '../components/MarkdownContent.jsx'
 import DifficultyBadge from '../components/coding/DifficultyBadge.jsx'
 import CodeRunner from '../components/coding/CodeRunner.jsx'
+import HtmlRunner from '../components/coding/HtmlRunner.jsx'
 
 function CodingPage() {
   const { id } = useParams()
@@ -70,7 +71,11 @@ function CodingPage() {
         <MarkdownContent>{problem.problem}</MarkdownContent>
       </div>
 
-      <CodeRunner key={problem.id} problem={problem} />
+      {problem.type === 'html' ? (
+        <HtmlRunner key={problem.id} problem={problem} />
+      ) : (
+        <CodeRunner key={problem.id} problem={problem} />
+      )}
 
       <section className="mt-10">
         {solutionVisible ? (

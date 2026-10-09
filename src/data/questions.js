@@ -45,6 +45,20 @@ import nodeMemoryLeaks from '../questions/node-memory-leaks.md?raw'
 import nodeShutdown from '../questions/node-graceful-shutdown.md?raw'
 import nodeNpm from '../questions/node-npm-package.md?raw'
 import nodeSecurity from '../questions/node-security.md?raw'
+import htmlSemantic from '../questions/html-semantic.md?raw'
+import htmlBlockInline from '../questions/html-block-inline.md?raw'
+import htmlAsyncDefer from '../questions/html-async-defer.md?raw'
+import htmlA11y from '../questions/html-accessibility.md?raw'
+import cssBoxModel from '../questions/css-box-model.md?raw'
+import cssSpecificity from '../questions/css-specificity.md?raw'
+import cssPositioning from '../questions/css-positioning.md?raw'
+import cssFlexbox from '../questions/css-flexbox.md?raw'
+import cssGrid from '../questions/css-grid.md?raw'
+import cssResponsive from '../questions/css-responsive-units.md?raw'
+import cssPseudo from '../questions/css-pseudo.md?raw'
+import cssHiding from '../questions/css-hiding.md?raw'
+import cssVariables from '../questions/css-variables.md?raw'
+import cssReflow from '../questions/css-reflow-repaint.md?raw'
 
 const questions = [
   {
@@ -277,6 +291,90 @@ const questions = [
     title: 'Node.js API security best practices',
     category: 'node',
     content: nodeSecurity,
+  },
+  {
+    id: 'html-semantic',
+    title: 'Semantic HTML & HTML5 features',
+    category: 'html-css',
+    content: htmlSemantic,
+  },
+  {
+    id: 'html-block-inline',
+    title: 'Block vs inline vs inline-block',
+    category: 'html-css',
+    content: htmlBlockInline,
+  },
+  {
+    id: 'html-async-defer',
+    title: 'Script loading: async vs defer',
+    category: 'html-css',
+    content: htmlAsyncDefer,
+  },
+  {
+    id: 'html-accessibility',
+    title: 'Accessibility (a11y) basics',
+    category: 'html-css',
+    content: htmlA11y,
+  },
+  {
+    id: 'css-box-model',
+    title: 'CSS box model, box-sizing & margin collapse',
+    category: 'html-css',
+    content: cssBoxModel,
+  },
+  {
+    id: 'css-specificity',
+    title: 'Specificity, cascade & inheritance',
+    category: 'html-css',
+    content: cssSpecificity,
+  },
+  {
+    id: 'css-positioning',
+    title: 'Positioning & z-index (stacking context)',
+    category: 'html-css',
+    content: cssPositioning,
+  },
+  {
+    id: 'css-flexbox',
+    title: 'Flexbox',
+    category: 'html-css',
+    content: cssFlexbox,
+  },
+  {
+    id: 'css-grid',
+    title: 'CSS Grid (and Grid vs Flexbox)',
+    category: 'html-css',
+    content: cssGrid,
+  },
+  {
+    id: 'css-responsive-units',
+    title: 'Responsive design & CSS units (rem, em, vw)',
+    category: 'html-css',
+    content: cssResponsive,
+  },
+  {
+    id: 'css-pseudo',
+    title: 'Pseudo-classes vs pseudo-elements',
+    category: 'html-css',
+    content: cssPseudo,
+  },
+  {
+    id: 'css-hiding',
+    title: 'display: none vs visibility: hidden vs opacity: 0',
+    category: 'html-css',
+    content: cssHiding,
+  },
+  {
+    id: 'css-variables',
+    title: 'CSS variables (custom properties) & theming',
+    category: 'html-css',
+    content: cssVariables,
+  },
+  {
+    id: 'css-reflow-repaint',
+    title: 'Reflow, repaint & animation performance',
+    category: 'html-css',
+    content: cssReflow,
   },
 ]
 

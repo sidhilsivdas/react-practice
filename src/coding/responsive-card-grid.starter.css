@@ -1,0 +1,16 @@
+/* Task: 3 equal columns on wide screens,
+   1 column on phones (narrower than 600px),
+   with 16px gaps between cards. */
+
+.grid {
+
+}
+
+.card {
+  padding: 24px;
+  background: #e0e7ff;
+  border: 1px solid #a5b4fc;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+}

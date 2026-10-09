@@ -1,0 +1,15 @@
+/* Task: center .box inside .container, horizontally AND vertically.
+   Keep the sizes. Then try a different method! */
+
+.container {
+  height: 300px;
+  border: 2px dashed #6366f1;
+  background: #eef2ff;
+}
+
+.box {
+  width: 120px;
+  height: 80px;
+  background: #6366f1;
+  color: white;
+}

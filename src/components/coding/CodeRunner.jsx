@@ -1,6 +1,7 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { runCode } from '../../utils/runCode.js'
 import { formatValue } from '../../utils/formatValue.js'
+import CodeEditor from './CodeEditor.jsx'
 
 // keep each problem's draft in this browser (it's fine if storage is blocked)
 function loadDraft(id) {
@@ -24,7 +25,6 @@ function CodeRunner({ problem }) {
   const [code, setCode] = useState(() => loadDraft(problem.id) ?? problem.starter)
   const [result, setResult] = useState(null)
   const [running, setRunning] = useState(false)
-  const editorRef = useRef(null)
 
   function updateCode(value) {
     setCode(value)
@@ -41,24 +41,6 @@ function CodeRunner({ problem }) {
   function handleReset() {
     updateCode(problem.starter)
     setResult(null)
-  }
-
-  function handleKeyDown(e) {
-    // Ctrl/Cmd + Enter runs the code
-    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-      e.preventDefault()
-      handleRun()
-      return
-    }
-    // Tab inserts two spaces instead of leaving the editor
-    if (e.key === 'Tab' && !e.shiftKey) {
-      e.preventDefault()
-      const { selectionStart, selectionEnd } = e.target
-      updateCode(code.slice(0, selectionStart) + '  ' + code.slice(selectionEnd))
-      requestAnimationFrame(() => {
-        editorRef.current.selectionStart = editorRef.current.selectionEnd = selectionStart + 2
-      })
-    }
   }
 
   const passed = result?.results?.filter((r) => r.pass).length ?? 0
@@ -82,18 +64,7 @@ function CodeRunner({ problem }) {
         </div>
       </div>
 
-      <textarea
-        ref={editorRef}
-        value={code}
-        onChange={(e) => updateCode(e.target.value)}
-        onKeyDown={handleKeyDown}
-        spellCheck={false}
-        autoCapitalize="off"
-        autoCorrect="off"
-        rows={Math.max(10, code.split('\n').length + 1)}
-        aria-label="Code editor"
-        className="block w-full resize-y bg-gray-900 p-4 font-mono text-sm leading-6 text-gray-100 outline-none"
-      />
+      <CodeEditor value={code} onChange={updateCode} onRun={handleRun} label="Code editor" />
       <p className="border-t border-gray-200 px-4 py-2 text-xs text-gray-500">
         Tab indents · Ctrl+Enter runs · your code is saved in this browser
       </p>

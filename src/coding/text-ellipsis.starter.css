@@ -1,0 +1,23 @@
+/* Task:
+   1. .title stays on ONE line and is cut off with "…"
+   2. .description shows at most TWO lines and is cut off with "…" */
+
+.card {
+  width: 280px;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.description {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+  color: #555;
+}
