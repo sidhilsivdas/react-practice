@@ -81,6 +81,22 @@ import sdLeadership from '../questions/sd-fe-mentoring-leadership.md?raw'
 import sdEcommerce from '../questions/sd-fe-design-ecommerce.md?raw'
 import sdFastify from '../questions/sd-be-fastify.md?raw'
 import faReactRedux from '../questions/fa-react-redux-architecture.md?raw'
+import fa01MicroFrontends from '../questions/fa-01-micro-frontends.md?raw'
+import fa02SpaToSsr from '../questions/fa-02-spa-to-ssr.md?raw'
+import fa03Monorepo from '../questions/fa-03-monorepo.md?raw'
+import fa04ComponentLibrary from '../questions/fa-04-component-library.md?raw'
+import fa05CsrSsrSsgIsr from '../questions/fa-05-csr-ssr-ssg-isr.md?raw'
+import fa06Lcp from '../questions/fa-06-lcp.md?raw'
+import fa07CodeSplitting from '../questions/fa-07-code-splitting.md?raw'
+import fa08ConcurrentReact from '../questions/fa-08-concurrent-react.md?raw'
+import fa09SpaMemoryLeaks from '../questions/fa-09-spa-memory-leaks.md?raw'
+import fa10Inp from '../questions/fa-10-inp.md?raw'
+import fa11StateManagementChoice from '../questions/fa-11-state-management-choice.md?raw'
+import fa12OptimisticUpdates from '../questions/fa-12-optimistic-updates.md?raw'
+import fa13Websockets from '../questions/fa-13-websockets.md?raw'
+import fa14GraphqlVsRest from '../questions/fa-14-graphql-vs-rest.md?raw'
+import fa15ComplexForms from '../questions/fa-15-complex-forms.md?raw'
+import fa16Xss from '../questions/fa-16-xss.md?raw'
 
 const questions = [
   {
@@ -536,6 +552,102 @@ const questions = [
     title: 'Production React + Redux architecture & folder structure',
     category: 'frontend-architecture',
     content: faReactRedux,
+  },
+  {
+    id: 'fa-01-micro-frontends',
+    title: 'Micro-frontend (MFE) architecture for large enterprise apps',
+    category: 'frontend-architecture',
+    content: fa01MicroFrontends,
+  },
+  {
+    id: 'fa-02-spa-to-ssr',
+    title: 'Migrating an SPA to SSR: challenges & solutions',
+    category: 'frontend-architecture',
+    content: fa02SpaToSsr,
+  },
+  {
+    id: 'fa-03-monorepo',
+    title: 'Structuring a React monorepo (Turborepo / Nx)',
+    category: 'frontend-architecture',
+    content: fa03Monorepo,
+  },
+  {
+    id: 'fa-04-component-library',
+    title: 'Enterprise component library that scales without bloat',
+    category: 'frontend-architecture',
+    content: fa04ComponentLibrary,
+  },
+  {
+    id: 'fa-05-csr-ssr-ssg-isr',
+    title: 'CSR vs SSR vs SSG vs ISR: when to use which',
+    category: 'frontend-architecture',
+    content: fa05CsrSsrSsgIsr,
+  },
+  {
+    id: 'fa-06-lcp',
+    title: 'Optimising LCP in a React app',
+    category: 'frontend-architecture',
+    content: fa06Lcp,
+  },
+  {
+    id: 'fa-07-code-splitting',
+    title: 'Code splitting beyond routes',
+    category: 'frontend-architecture',
+    content: fa07CodeSplitting,
+  },
+  {
+    id: 'fa-08-concurrent-react',
+    title: 'React 18 concurrent features for complex UIs',
+    category: 'frontend-architecture',
+    content: fa08ConcurrentReact,
+  },
+  {
+    id: 'fa-09-spa-memory-leaks',
+    title: 'Finding & fixing memory leaks in a long-running SPA',
+    category: 'frontend-architecture',
+    content: fa09SpaMemoryLeaks,
+  },
+  {
+    id: 'fa-10-inp',
+    title: 'INP (Interaction to Next Paint) & optimising it in React',
+    category: 'frontend-architecture',
+    content: fa10Inp,
+  },
+  {
+    id: 'fa-11-state-management-choice',
+    title: 'Redux/Zustand vs Context vs React Query',
+    category: 'frontend-architecture',
+    content: fa11StateManagementChoice,
+  },
+  {
+    id: 'fa-12-optimistic-updates',
+    title: 'Cache invalidation & optimistic updates',
+    category: 'frontend-architecture',
+    content: fa12OptimisticUpdates,
+  },
+  {
+    id: 'fa-13-websockets',
+    title: 'Real-time data with WebSockets',
+    category: 'frontend-architecture',
+    content: fa13Websockets,
+  },
+  {
+    id: 'fa-14-graphql-vs-rest',
+    title: 'GraphQL vs REST trade-offs',
+    category: 'frontend-architecture',
+    content: fa14GraphqlVsRest,
+  },
+  {
+    id: 'fa-15-complex-forms',
+    title: 'Complex multi-page forms with dependent validation',
+    category: 'frontend-architecture',
+    content: fa15ComplexForms,
+  },
+  {
+    id: 'fa-16-xss',
+    title: 'Securing React against XSS',
+    category: 'frontend-architecture',
+    content: fa16Xss,
   },
 ]
 
