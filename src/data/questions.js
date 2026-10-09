@@ -76,6 +76,7 @@ import sdCollab from '../questions/sd-fe-collaboration-devops.md?raw'
 import sdLeadership from '../questions/sd-fe-mentoring-leadership.md?raw'
 import sdEcommerce from '../questions/sd-fe-design-ecommerce.md?raw'
 import sdFastify from '../questions/sd-be-fastify.md?raw'
+import faReactRedux from '../questions/fa-react-redux-architecture.md?raw'
 
 const questions = [
   {
@@ -505,6 +506,12 @@ const questions = [
     category: 'system-design',
     section: 'backend',
     content: sdFastify,
+  },
+  {
+    id: 'fa-react-redux-architecture',
+    title: 'Production React + Redux architecture & folder structure',
+    category: 'frontend-architecture',
+    content: faReactRedux,
   },
 ]
 
