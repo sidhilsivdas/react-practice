@@ -30,6 +30,21 @@ import bigLists from '../questions/big-lists.md?raw'
 import redux from '../questions/redux.md?raw'
 import reactRouter from '../questions/react-router.md?raw'
 import useLocationQ from '../questions/uselocation.md?raw'
+import nodeHowItWorks from '../questions/node-how-it-works.md?raw'
+import nodeNextTick from '../questions/node-nexttick-process.md?raw'
+import nodeThreadPool from '../questions/node-thread-pool-blocking.md?raw'
+import nodeStreams from '../questions/node-streams-backpressure.md?raw'
+import nodeEventEmitter from '../questions/node-event-emitter.md?raw'
+import nodeModules from '../questions/node-modules.md?raw'
+import nodeErrors from '../questions/node-error-handling.md?raw'
+import nodeMiddleware from '../questions/node-express-middleware.md?raw'
+import nodeCluster from '../questions/node-cluster.md?raw'
+import nodeWorkers from '../questions/node-worker-threads-child-process.md?raw'
+import nodePm2 from '../questions/node-pm2.md?raw'
+import nodeMemoryLeaks from '../questions/node-memory-leaks.md?raw'
+import nodeShutdown from '../questions/node-graceful-shutdown.md?raw'
+import nodeNpm from '../questions/node-npm-package.md?raw'
+import nodeSecurity from '../questions/node-security.md?raw'
 
 const questions = [
   {
@@ -108,11 +123,6 @@ const questions = [
     content: eventLoopBrowser,
   },
   {
-    id: 'event-loop-node',
-    title: 'Node.js event loop phases (timers, poll, check)',
-    content: eventLoopNode,
-  },
-  {
     id: 'map-filter-reduce',
     title: 'map, filter & reduce',
     content: mapFilterReduce,
@@ -171,6 +181,102 @@ const questions = [
     id: 'uselocation',
     title: 'useLocation: query params & navigation state',
     content: useLocationQ,
+  },
+  {
+    id: 'node-how-it-works',
+    title: 'How Node.js works (V8, libuv, non-blocking I/O)',
+    category: 'node',
+    content: nodeHowItWorks,
+  },
+  {
+    id: 'event-loop-node',
+    title: 'Node.js event loop phases (timers, poll, check)',
+    category: 'node',
+    content: eventLoopNode,
+  },
+  {
+    id: 'node-nexttick-process',
+    title: 'process.nextTick vs setImmediate & the process object',
+    category: 'node',
+    content: nodeNextTick,
+  },
+  {
+    id: 'node-thread-pool-blocking',
+    title: 'libuv thread pool & blocking the event loop',
+    category: 'node',
+    content: nodeThreadPool,
+  },
+  {
+    id: 'node-streams-backpressure',
+    title: 'Streams & backpressure',
+    category: 'node',
+    content: nodeStreams,
+  },
+  {
+    id: 'node-event-emitter',
+    title: 'EventEmitter in Node.js',
+    category: 'node',
+    content: nodeEventEmitter,
+  },
+  {
+    id: 'node-modules',
+    title: 'CommonJS vs ES modules',
+    category: 'node',
+    content: nodeModules,
+  },
+  {
+    id: 'node-error-handling',
+    title: 'Error handling in Node.js',
+    category: 'node',
+    content: nodeErrors,
+  },
+  {
+    id: 'node-express-middleware',
+    title: 'Express middleware',
+    category: 'node',
+    content: nodeMiddleware,
+  },
+  {
+    id: 'node-cluster',
+    title: 'Cluster module (using all CPU cores)',
+    category: 'node',
+    content: nodeCluster,
+  },
+  {
+    id: 'node-worker-threads-child-process',
+    title: 'Worker threads vs child processes vs cluster',
+    category: 'node',
+    content: nodeWorkers,
+  },
+  {
+    id: 'node-pm2',
+    title: 'PM2 process manager',
+    category: 'node',
+    content: nodePm2,
+  },
+  {
+    id: 'node-memory-leaks',
+    title: 'Memory leaks: causes & debugging',
+    category: 'node',
+    content: nodeMemoryLeaks,
+  },
+  {
+    id: 'node-graceful-shutdown',
+    title: 'Graceful shutdown (SIGTERM)',
+    category: 'node',
+    content: nodeShutdown,
+  },
+  {
+    id: 'node-npm-package',
+    title: 'npm, package.json & semver',
+    category: 'node',
+    content: nodeNpm,
+  },
+  {
+    id: 'node-security',
+    title: 'Node.js API security best practices',
+    category: 'node',
+    content: nodeSecurity,
   },
 ]
 
