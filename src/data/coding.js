@@ -184,6 +184,58 @@ return original`,
     ],
   },
   {
+    id: 'sort-by-age',
+    title: 'Sort an array of objects by age (O(n log n))',
+    difficulty: 'Easy',
+    topics: ['Sorting', 'Arrays', 'Immutability', 'Time complexity'],
+    functionName: 'sortByAge',
+    tests: [
+      {
+        args: [[{ name: 'Sam', age: 32 }, { name: 'Priya', age: 25 }, { name: 'Alex', age: 41 }]],
+        expected: [{ name: 'Priya', age: 25 }, { name: 'Sam', age: 32 }, { name: 'Alex', age: 41 }],
+      },
+      {
+        args: [[{ name: 'Sam', age: 32 }, { name: 'Priya', age: 25 }, { name: 'Alex', age: 41 }], 'desc'],
+        expected: [{ name: 'Alex', age: 41 }, { name: 'Sam', age: 32 }, { name: 'Priya', age: 25 }],
+      },
+      {
+        label: 'sorts ages as numbers, not text (9 < 25 < 100)',
+        run: `return sortByAge([{ name: 'A', age: 100 }, { name: 'B', age: 25 }, { name: 'C', age: 9 }]).map((p) => p.age)`,
+        expected: [9, 25, 100],
+      },
+      {
+        label: 'same age keeps the original order (stable), ascending',
+        run: `const people = [{ name: 'Sam', age: 32 }, { name: 'Priya', age: 25 }, { name: 'Alex', age: 41 }, { name: 'Mia', age: 25 }]
+return sortByAge(people).map((p) => p.name)`,
+        expected: ['Priya', 'Mia', 'Sam', 'Alex'],
+      },
+      {
+        label: 'same age keeps the original order (stable), descending',
+        run: `const people = [{ name: 'Sam', age: 32 }, { name: 'Priya', age: 25 }, { name: 'Alex', age: 41 }, { name: 'Mia', age: 25 }]
+return sortByAge(people, 'desc').map((p) => p.name)`,
+        expected: ['Alex', 'Sam', 'Priya', 'Mia'],
+      },
+      {
+        label: "doesn't change the original array, and returns a new one",
+        run: `const people = [{ name: 'Sam', age: 32 }, { name: 'Priya', age: 25 }]
+const result = sortByAge(people)
+return [people.map((p) => p.name), result !== people]`,
+        expected: [['Sam', 'Priya'], true],
+      },
+      { args: [[]], expected: [] },
+      {
+        label: 'handles 10,000 people quickly (O(n log n), not O(n²))',
+        run: `const people = Array.from({ length: 10000 }, (_, i) => ({ name: 'P' + i, age: (i * 7919) % 100 }))
+const start = performance.now()
+const sorted = sortByAge(people)
+const ms = performance.now() - start
+const ordered = sorted.every((p, i) => i === 0 || sorted[i - 1].age <= p.age)
+return ordered && sorted.length === 10000 && ms < 150 ? true : 'sorted correctly: ' + ordered + ', took ' + Math.round(ms) + 'ms'`,
+        expected: true,
+      },
+    ],
+  },
+  {
     id: 'debounce',
     title: 'Implement debounce',
     difficulty: 'Medium',
