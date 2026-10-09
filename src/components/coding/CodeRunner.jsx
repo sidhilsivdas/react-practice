@@ -117,7 +117,8 @@ function CodeRunner({ problem }) {
                       className={`rounded border px-3 py-2 font-mono text-xs ${r.pass ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}
                     >
                       <div className="break-all">
-                        {r.pass ? '✅' : '❌'} {problem.functionName}({test.args.map((a) => formatValue(a, true)).join(', ')})
+                        {r.pass ? '✅' : '❌'}{' '}
+                        {test.label ?? `${problem.functionName}(${test.args.map((a) => formatValue(a, true)).join(', ')})`}
                       </div>
                       {!r.pass && (
                         <div className="mt-1 break-all pl-6 text-gray-700">
