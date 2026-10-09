@@ -129,6 +129,31 @@ try { return flatten([1, [2, [3]]]) } finally { Array.prototype.flat = original 
     ],
   },
   {
+    id: 'flatten-object',
+    title: 'Flatten a nested object',
+    difficulty: 'Medium',
+    topics: ['Objects', 'Recursion', 'Object.entries'],
+    functionName: 'flattenObject',
+    tests: [
+      { args: [{ a: 1, b: { c: 2, d: { e: 3 } } }], expected: { a: 1, 'b.c': 2, 'b.d.e': 3 } },
+      { args: [{ a: { b: { c: { d: { e: 'deep' } } } } }], expected: { 'a.b.c.d.e': 'deep' } },
+      {
+        args: [{ user: { name: 'Sam', tags: ['js', 'react'] } }],
+        expected: { 'user.name': 'Sam', 'user.tags.0': 'js', 'user.tags.1': 'react' },
+      },
+      { args: [{ a: null, b: { c: null, d: false, e: 0 } }], expected: { a: null, 'b.c': null, 'b.d': false, 'b.e': 0 } },
+      { args: [{ a: {}, b: [], c: { d: {} } }], expected: { a: {}, b: [], 'c.d': {} } },
+      { args: [{}], expected: {} },
+      {
+        label: "doesn't change the original object",
+        run: `const original = { a: { b: 1 }, list: [1, 2] }
+flattenObject(original)
+return original`,
+        expected: { a: { b: 1 }, list: [1, 2] },
+      },
+    ],
+  },
+  {
     id: 'chunk-array',
     title: 'Chunk an array',
     difficulty: 'Easy',
