@@ -1,44 +1,59 @@
 import { Link, useSearchParams } from 'react-router'
 import questions from '../data/questions.js'
+import coding from '../data/coding.js'
 import categories from '../data/categories.js'
 import { searchQuestions } from '../utils/search.js'
 import Tag from './Tag.jsx'
 import ComingSoon from './ComingSoon.jsx'
+import DifficultyBadge from './coding/DifficultyBadge.jsx'
+
+const VIEWS = [
+  { id: 'questions', label: '📘 Questions', items: questions },
+  { id: 'coding', label: '💻 Coding', items: coding },
+]
 
 function Home() {
-  // keep the category and search text in the URL (?cat=...&search=...),
+  // keep category, view and search text in the URL (?cat=...&view=...&search=...),
   // so they're still there after going back
   const [searchParams, setSearchParams] = useSearchParams()
   const query = searchParams.get('search') || ''
   const category = categories.find((c) => c.id === searchParams.get('cat')) || categories[0]
+  const view = VIEWS.find((v) => v.id === searchParams.get('view')) || VIEWS[0]
 
-  const inCategory = questions.filter((q) => q.category === category.id)
-  const results = searchQuestions(inCategory, query)
+  const countIn = (items, categoryId) => items.filter((item) => item.category === categoryId).length
+  const categoryTotal = (categoryId) => VIEWS.reduce((sum, v) => sum + countIn(v.items, categoryId), 0)
+
+  const inView = view.items.filter((item) => item.category === category.id)
+  const results = searchQuestions(inView, query)
 
   function updateParams(changes) {
-    const next = { cat: category.id, search: query, ...changes }
-    if (next.cat === categories[0].id) delete next.cat // default category needs no param
+    const next = { cat: category.id, view: view.id, search: query, ...changes }
+    if (next.cat === categories[0].id) delete next.cat // defaults need no param
+    if (next.view === VIEWS[0].id) delete next.view
     if (!next.search) delete next.search
     setSearchParams(next, { replace: true })
   }
+
+  const isCoding = view.id === 'coding'
+  const noun = isCoding ? 'problem' : 'question'
 
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-900 sm:text-4xl">React Practice</h1>
       <p className="mt-2 text-gray-600">
-        Interview questions with simple answers. Tap a question to read it, or a tag to jump to that part.
+        Interview questions with simple answers, and coding problems you can run in the browser.
       </p>
 
       {/* category tabs: wrap onto more lines on small screens */}
       <nav className="mt-6">
         <div className="flex flex-wrap gap-2">
           {categories.map((c) => {
-            const count = questions.filter((q) => q.category === c.id).length
+            const count = categoryTotal(c.id)
             const selected = c.id === category.id
             return (
               <button
                 key={c.id}
-                onClick={() => updateParams({ cat: c.id })}
+                onClick={() => updateParams({ cat: c.id, view: VIEWS[0].id, search: '' })}
                 className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-medium transition sm:px-4 sm:py-2 ${
                   selected
                     ? 'border-blue-600 bg-blue-600 text-white'
@@ -60,54 +75,101 @@ function Home() {
         </div>
       </nav>
 
-      {inCategory.length === 0 ? (
+      {categoryTotal(category.id) === 0 ? (
         <ComingSoon category={category} />
       ) : (
         <>
-          <div className="mt-6">
-            <input
-              type="search"
-              value={query}
-              onChange={(e) => updateParams({ search: e.target.value })}
-              placeholder={`Search ${category.title}, e.g. arrow, array, useEffect...`}
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
-            />
-            {query && (
-              <p className="mt-2 text-sm text-gray-500">
-                {results.length} {results.length === 1 ? 'question matches' : 'questions match'}
-                {results.length > 0 && ' · highlighted tags contain your search'}
-              </p>
-            )}
+          {/* Questions | Coding switch */}
+          <div className="mt-6 inline-flex rounded-lg border border-gray-300 bg-white p-1" role="tablist">
+            {VIEWS.map((v) => {
+              const selected = v.id === view.id
+              return (
+                <button
+                  key={v.id}
+                  role="tab"
+                  aria-selected={selected}
+                  onClick={() => updateParams({ view: v.id, search: '' })}
+                  className={`rounded-md px-4 py-1.5 text-sm font-medium transition ${
+                    selected ? 'bg-gray-900 text-white' : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  {v.label}
+                  <span className={`ml-2 text-xs ${selected ? 'text-gray-300' : 'text-gray-400'}`}>
+                    {countIn(v.items, category.id)}
+                  </span>
+                </button>
+              )
+            })}
           </div>
 
-          <ul className="mt-6 space-y-4">
-            {results.map(({ question: q, matchedSlugs }) => (
-              <li
-                key={q.id}
-                className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm transition hover:border-blue-400 hover:shadow-md"
-              >
-                <h2 className="text-lg font-semibold text-gray-900">
-                  <Link to={`/q/${q.id}`} className="hover:text-blue-700">
-                    <span className="mr-2 text-gray-400">{inCategory.indexOf(q) + 1}.</span>
-                    {q.title}
-                  </Link>
-                </h2>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {q.sections.map((section) => (
-                    <Tag
-                      key={section.slug}
-                      questionId={q.id}
-                      section={section}
-                      matched={matchedSlugs.includes(section.slug)}
-                    />
-                  ))}
-                </div>
-              </li>
-            ))}
-          </ul>
+          {inView.length === 0 ? (
+            <p className="mt-8 rounded-lg border border-dashed border-gray-300 bg-white px-6 py-10 text-center text-gray-600">
+              No {noun}s here yet. Coming soon!
+            </p>
+          ) : (
+            <>
+              <div className="mt-4">
+                <input
+                  type="search"
+                  value={query}
+                  onChange={(e) => updateParams({ search: e.target.value })}
+                  placeholder={isCoding ? 'Search coding problems, e.g. array, Set...' : `Search ${category.title}, e.g. arrow, array, useEffect...`}
+                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 shadow-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+                />
+                {query && (
+                  <p className="mt-2 text-sm text-gray-500">
+                    {results.length} {results.length === 1 ? `${noun} matches` : `${noun}s match`}
+                    {results.length > 0 && ' · highlighted tags contain your search'}
+                  </p>
+                )}
+              </div>
 
-          {query && results.length === 0 && (
-            <p className="mt-8 text-center text-gray-500">No questions match “{query}”.</p>
+              <ul className="mt-6 space-y-4">
+                {results.map(({ question: item, matchedSlugs }) => {
+                  const basePath = isCoding ? `/code/${item.id}` : `/q/${item.id}`
+                  return (
+                    <li
+                      key={item.id}
+                      className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm transition hover:border-blue-400 hover:shadow-md"
+                    >
+                      <h2 className="text-lg font-semibold text-gray-900">
+                        <Link to={basePath} className="hover:text-blue-700">
+                          <span className="mr-2 text-gray-400">{inView.indexOf(item) + 1}.</span>
+                          {item.title}
+                        </Link>
+                      </h2>
+
+                      {isCoding ? (
+                        <div className="mt-3 flex flex-wrap items-center gap-2">
+                          <DifficultyBadge difficulty={item.difficulty} />
+                          {item.topics.map((topic) => (
+                            <span key={topic} className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs text-gray-600">
+                              {topic}
+                            </span>
+                          ))}
+                          {/* while searching, show which parts mention it */}
+                          {item.sections
+                            .filter((s) => matchedSlugs.includes(s.slug))
+                            .map((s) => (
+                              <Tag key={s.slug} to={basePath} section={s} matched />
+                            ))}
+                        </div>
+                      ) : (
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {item.sections.map((s) => (
+                            <Tag key={s.slug} to={basePath} section={s} matched={matchedSlugs.includes(s.slug)} />
+                          ))}
+                        </div>
+                      )}
+                    </li>
+                  )
+                })}
+              </ul>
+
+              {query && results.length === 0 && (
+                <p className="mt-8 text-center text-gray-500">No {noun}s match “{query}”.</p>
+              )}
+            </>
           )}
         </>
       )}

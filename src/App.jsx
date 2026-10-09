@@ -1,6 +1,7 @@
 import { HashRouter, Link, Route, Routes } from 'react-router'
 import Home from './components/Home.jsx'
 import QuestionPage from './pages/QuestionPage.jsx'
+import CodingPage from './pages/CodingPage.jsx'
 import Playground from './pages/Playground.jsx'
 
 // HashRouter keeps URLs like /#/q/strict-mode, which work on GitHub Pages
@@ -23,6 +24,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/q/:id" element={<QuestionPage />} />
+            <Route path="/code/:id" element={<CodingPage />} />
             <Route path="/playground" element={<Playground />} />
           </Routes>
         </main>

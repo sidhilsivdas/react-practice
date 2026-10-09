@@ -1,26 +1,9 @@
 import { useEffect } from 'react'
 import { Link, useLocation, useParams, useSearchParams } from 'react-router'
-import Markdown from 'react-markdown'
-import remarkGfm from 'remark-gfm'
 import allQuestions from '../data/questions.js'
 import categories from '../data/categories.js'
 import Tag from '../components/Tag.jsx'
-import { slugify } from '../utils/sections.js'
-
-// plain text of a markdown heading node, e.g. "Fix with `useCallback`" → "Fix with useCallback"
-function nodeText(node) {
-  if (node.type === 'text') return node.value
-  return (node.children || []).map(nodeText).join('')
-}
-
-// give every "## " heading an id so tags can scroll to it
-const markdownComponents = {
-  h2: ({ node, children }) => (
-    <h2 id={slugify(nodeText(node))} className="scroll-mt-6">
-      {children}
-    </h2>
-  ),
-}
+import MarkdownContent from '../components/MarkdownContent.jsx'
 
 function QuestionPage() {
   const { id } = useParams()
@@ -67,14 +50,12 @@ function QuestionPage() {
       <h1 className="mt-4 text-2xl font-bold text-gray-900 sm:text-3xl">{question.title}</h1>
       <div className="mt-3 flex flex-wrap gap-2">
         {question.sections.map((s) => (
-          <Tag key={s.slug} questionId={question.id} section={s} active={s.slug === section} />
+          <Tag key={s.slug} to={`/q/${question.id}`} section={s} active={s.slug === section} />
         ))}
       </div>
 
-      <div className="prose prose-gray mt-8 max-w-none prose-pre:overflow-x-auto prose-table:block prose-table:overflow-x-auto">
-        <Markdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-          {question.content}
-        </Markdown>
+      <div className="mt-8">
+        <MarkdownContent>{question.content}</MarkdownContent>
       </div>
 
       <nav className="mt-12 flex justify-between gap-4 border-t border-gray-200 pt-6 text-sm">
