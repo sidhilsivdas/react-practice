@@ -7,10 +7,17 @@ import Tag from './Tag.jsx'
 import ComingSoon from './ComingSoon.jsx'
 import DifficultyBadge from './coding/DifficultyBadge.jsx'
 
-const VIEWS = [
+const DEFAULT_VIEWS = [
   { id: 'questions', label: '📘 Questions', items: questions },
   { id: 'coding', label: '💻 Coding', items: coding },
 ]
+
+// A category can define its own tabs instead of Questions | Coding,
+// e.g. System Design → Frontend | Backend (questions split by their `section`)
+function viewsFor(category) {
+  if (!category.views) return DEFAULT_VIEWS
+  return category.views.map((v) => ({ ...v, items: questions.filter((q) => q.section === v.id) }))
+}
 
 function Home() {
   // keep category, view and search text in the URL (?cat=...&view=...&search=...),
@@ -18,10 +25,11 @@ function Home() {
   const [searchParams, setSearchParams] = useSearchParams()
   const query = searchParams.get('search') || ''
   const category = categories.find((c) => c.id === searchParams.get('cat')) || categories[0]
-  const view = VIEWS.find((v) => v.id === searchParams.get('view')) || VIEWS[0]
+  const views = viewsFor(category)
+  const view = views.find((v) => v.id === searchParams.get('view')) || views[0]
 
   const countIn = (items, categoryId) => items.filter((item) => item.category === categoryId).length
-  const categoryTotal = (categoryId) => VIEWS.reduce((sum, v) => sum + countIn(v.items, categoryId), 0)
+  const categoryTotal = (c) => viewsFor(c).reduce((sum, v) => sum + countIn(v.items, c.id), 0)
 
   const inView = view.items.filter((item) => item.category === category.id)
   const results = searchQuestions(inView, query)
@@ -29,7 +37,8 @@ function Home() {
   function updateParams(changes) {
     const next = { cat: category.id, view: view.id, search: query, ...changes }
     if (next.cat === categories[0].id) delete next.cat // defaults need no param
-    if (next.view === VIEWS[0].id) delete next.view
+    const nextCategory = categories.find((c) => c.id === next.cat) ?? categories[0]
+    if (!next.view || next.view === viewsFor(nextCategory)[0].id) delete next.view
     if (!next.search) delete next.search
     setSearchParams(next, { replace: true })
   }
@@ -48,12 +57,12 @@ function Home() {
       <nav className="mt-6">
         <div className="flex flex-wrap gap-2">
           {categories.map((c) => {
-            const count = categoryTotal(c.id)
+            const count = categoryTotal(c)
             const selected = c.id === category.id
             return (
               <button
                 key={c.id}
-                onClick={() => updateParams({ cat: c.id, view: VIEWS[0].id, search: '' })}
+                onClick={() => updateParams({ cat: c.id, view: '', search: '' })}
                 className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-medium transition sm:px-4 sm:py-2 ${
                   selected
                     ? 'border-blue-600 bg-blue-600 text-white'
@@ -75,13 +84,13 @@ function Home() {
         </div>
       </nav>
 
-      {categoryTotal(category.id) === 0 ? (
+      {categoryTotal(category) === 0 ? (
         <ComingSoon category={category} />
       ) : (
         <>
           {/* Questions | Coding switch */}
           <div className="mt-6 inline-flex rounded-lg border border-gray-300 bg-white p-1" role="tablist">
-            {VIEWS.map((v) => {
+            {views.map((v) => {
               const selected = v.id === view.id
               return (
                 <button

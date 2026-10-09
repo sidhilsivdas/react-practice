@@ -61,6 +61,21 @@ import cssPseudo from '../questions/css-pseudo.md?raw'
 import cssHiding from '../questions/css-hiding.md?raw'
 import cssVariables from '../questions/css-variables.md?raw'
 import cssReflow from '../questions/css-reflow-repaint.md?raw'
+import playwrightE2e from '../questions/playwright-e2e.md?raw'
+import sdJd from '../questions/sd-fe-jd-decoded.md?raw'
+import sdFramework from '../questions/sd-fe-interview-framework.md?raw'
+import sdArchitecture from '../questions/sd-fe-architecture.md?raw'
+import sdNext from '../questions/sd-fe-nextjs-rendering.md?raw'
+import sdHeadless from '../questions/sd-fe-headless-commerce.md?raw'
+import sdPatterns from '../questions/sd-fe-react-patterns.md?raw'
+import sdRequirements from '../questions/sd-fe-requirements-to-code.md?raw'
+import sdStandards from '../questions/sd-fe-coding-standards.md?raw'
+import sdPerformance from '../questions/sd-fe-performance-cwv.md?raw'
+import sdA11y from '../questions/sd-fe-accessibility.md?raw'
+import sdCollab from '../questions/sd-fe-collaboration-devops.md?raw'
+import sdLeadership from '../questions/sd-fe-mentoring-leadership.md?raw'
+import sdEcommerce from '../questions/sd-fe-design-ecommerce.md?raw'
+import sdFastify from '../questions/sd-be-fastify.md?raw'
 
 const questions = [
   {
@@ -207,6 +222,11 @@ const questions = [
     id: 'build-tools-babel-webpack-vite',
     title: 'Babel, Webpack & why Vite came',
     content: buildTools,
+  },
+  {
+    id: 'playwright-e2e',
+    title: 'Playwright end-to-end testing',
+    content: playwrightE2e,
   },
   {
     id: 'node-how-it-works',
@@ -387,6 +407,104 @@ const questions = [
     title: 'Reflow, repaint & animation performance',
     category: 'html-css',
     content: cssReflow,
+  },
+  {
+    id: 'sd-fe-jd-decoded',
+    title: "React Architect JD decoded: expectations & study plan",
+    category: 'system-design',
+    section: 'frontend',
+    content: sdJd,
+  },
+  {
+    id: 'sd-fe-interview-framework',
+    title: "How to answer a frontend system design interview (RADIO)",
+    category: 'system-design',
+    section: 'frontend',
+    content: sdFramework,
+  },
+  {
+    id: 'sd-fe-architecture',
+    title: "Leading & defining frontend architecture",
+    category: 'system-design',
+    section: 'frontend',
+    content: sdArchitecture,
+  },
+  {
+    id: 'sd-fe-nextjs-rendering',
+    title: "Next.js rendering strategies, server components & caching",
+    category: 'system-design',
+    section: 'frontend',
+    content: sdNext,
+  },
+  {
+    id: 'sd-fe-headless-commerce',
+    title: "Headless e-commerce & API integration (BFF)",
+    category: 'system-design',
+    section: 'frontend',
+    content: sdHeadless,
+  },
+  {
+    id: 'sd-fe-react-patterns',
+    title: "Modern React patterns for scalable UI",
+    category: 'system-design',
+    section: 'frontend',
+    content: sdPatterns,
+  },
+  {
+    id: 'sd-fe-requirements-to-code',
+    title: "Turning business & UX requirements into code",
+    category: 'system-design',
+    section: 'frontend',
+    content: sdRequirements,
+  },
+  {
+    id: 'sd-fe-coding-standards',
+    title: "Coding standards, best practices & code reviews",
+    category: 'system-design',
+    section: 'frontend',
+    content: sdStandards,
+  },
+  {
+    id: 'sd-fe-performance-cwv',
+    title: "Performance, scalability & Core Web Vitals",
+    category: 'system-design',
+    section: 'frontend',
+    content: sdPerformance,
+  },
+  {
+    id: 'sd-fe-accessibility',
+    title: "Accessibility at scale (WCAG 2.2, EAA)",
+    category: 'system-design',
+    section: 'frontend',
+    content: sdA11y,
+  },
+  {
+    id: 'sd-fe-collaboration-devops',
+    title: "Working with backend, UX & DevOps (CI/CD)",
+    category: 'system-design',
+    section: 'frontend',
+    content: sdCollab,
+  },
+  {
+    id: 'sd-fe-mentoring-leadership',
+    title: "Mentoring & technical leadership",
+    category: 'system-design',
+    section: 'frontend',
+    content: sdLeadership,
+  },
+  {
+    id: 'sd-fe-design-ecommerce',
+    title: "Worked example: design a headless e-commerce storefront",
+    category: 'system-design',
+    section: 'frontend',
+    content: sdEcommerce,
+  },
+  {
+    id: 'sd-be-fastify',
+    title: "Node.js services with Fastify (performance & scalability)",
+    category: 'system-design',
+    section: 'backend',
+    content: sdFastify,
   },
 ]
 

@@ -13,9 +13,14 @@ function QuestionPage() {
 
   const question = allQuestions.find((q) => q.id === id)
   const category = categories.find((c) => c.id === question?.category)
+  // e.g. System Design → "Frontend" tab
+  const sectionView = category?.views?.find((v) => v.id === question?.section)
+  const backTo = `/?cat=${question?.category}${sectionView ? `&view=${sectionView.id}` : ''}`
 
-  // previous / next stay inside the same category
-  const questions = allQuestions.filter((q) => q.category === question?.category)
+  // previous / next stay inside the same category (and section)
+  const questions = allQuestions.filter(
+    (q) => q.category === question?.category && q.section === question?.section
+  )
   const index = questions.indexOf(question)
   const prev = questions[index - 1]
   const next = questions[index + 1]
@@ -43,8 +48,9 @@ function QuestionPage() {
 
   return (
     <article>
-      <Link to={`/?cat=${question.category}`} className="text-sm text-blue-600 hover:underline">
+      <Link to={backTo} className="text-sm text-blue-600 hover:underline">
         ← {category?.title ?? 'All questions'}
+        {sectionView && ` · ${sectionView.label.replace(/^\S+\s/, '')}`}
       </Link>
 
       <h1 className="mt-4 text-2xl font-bold text-gray-900 sm:text-3xl">{question.title}</h1>

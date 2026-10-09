@@ -32,6 +32,11 @@ const categories = [
     title: 'System Design',
     icon: '🧩',
     description: 'Designing scalable systems end to end.',
+    // own tabs instead of Questions | Coding: questions with section: 'frontend' / 'backend'
+    views: [
+      { id: 'frontend', label: '🖥️ Frontend' },
+      { id: 'backend', label: '⚙️ Backend' },
+    ],
     planned: ['Scalability basics', 'Caching & CDNs', 'Load balancing', 'Design a URL shortener', 'Design a chat app', 'Rate limiting'],
   },
   {
