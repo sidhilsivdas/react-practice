@@ -66,6 +66,7 @@ import promiseCombinators from '../questions/promise-combinators.md?raw'
 import promisesAsyncAwait from '../questions/promises-async-await.md?raw'
 import closuresHoisting from '../questions/closures-hoisting.md?raw'
 import browserStorage from '../questions/browser-storage-cookies.md?raw'
+import corsCookies from '../questions/cors-cookies-headers.md?raw'
 import sdJd from '../questions/sd-fe-jd-decoded.md?raw'
 import sdFramework from '../questions/sd-fe-interview-framework.md?raw'
 import sdArchitecture from '../questions/sd-fe-architecture.md?raw'
@@ -268,6 +269,11 @@ const questions = [
     id: 'browser-storage-cookies',
     title: 'localStorage vs sessionStorage vs cookies (HttpOnly)',
     content: browserStorage,
+  },
+  {
+    id: 'cors-cookies-headers',
+    title: 'CORS (Access-Control-Allow-Origin), cookies & security headers with server config',
+    content: corsCookies,
   },
   {
     id: 'node-how-it-works',
