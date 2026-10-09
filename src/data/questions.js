@@ -62,6 +62,10 @@ import cssHiding from '../questions/css-hiding.md?raw'
 import cssVariables from '../questions/css-variables.md?raw'
 import cssReflow from '../questions/css-reflow-repaint.md?raw'
 import playwrightE2e from '../questions/playwright-e2e.md?raw'
+import promiseCombinators from '../questions/promise-combinators.md?raw'
+import promisesAsyncAwait from '../questions/promises-async-await.md?raw'
+import closuresHoisting from '../questions/closures-hoisting.md?raw'
+import browserStorage from '../questions/browser-storage-cookies.md?raw'
 import sdJd from '../questions/sd-fe-jd-decoded.md?raw'
 import sdFramework from '../questions/sd-fe-interview-framework.md?raw'
 import sdArchitecture from '../questions/sd-fe-architecture.md?raw'
@@ -228,6 +232,26 @@ const questions = [
     id: 'playwright-e2e',
     title: 'Playwright end-to-end testing',
     content: playwrightE2e,
+  },
+  {
+    id: 'promise-combinators',
+    title: 'Calling multiple APIs: Promise.all, allSettled, race & any',
+    content: promiseCombinators,
+  },
+  {
+    id: 'promises-async-await',
+    title: 'Promises in depth: states, then/catch, async/await & HTTP status handling',
+    content: promisesAsyncAwait,
+  },
+  {
+    id: 'closures-hoisting',
+    title: 'Closures & hoisting (TDZ, let/const, function declarations vs arrows)',
+    content: closuresHoisting,
+  },
+  {
+    id: 'browser-storage-cookies',
+    title: 'localStorage vs sessionStorage vs cookies (HttpOnly)',
+    content: browserStorage,
   },
   {
     id: 'node-how-it-works',

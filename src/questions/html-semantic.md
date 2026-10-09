@@ -138,6 +138,77 @@
 
 ---
 
+## SEO impact
+
+**Search engines read your HTML like a document.** Semantic markup helps them understand **what the page is about and which parts matter**:
+
+| Semantic choice | Direct SEO impact |
+|---|---|
+| **One `<h1>` + logical `<h2>`/`<h3>` outline** | Headings signal the topic and structure. The `<h1>` is a strong hint of what the page is about. |
+| **`<main>`, `<article>`** | Helps separate the **main content** from navigation, ads and footers |
+| **`<nav>` with real `<a href>` links** | Crawlers **follow `<a href>`**. A `<div onclick>` "link" is **not crawled** and passes no link value. |
+| **Descriptive link text** | "Running shoes guide" tells search engines about the target page; "click here" tells them nothing |
+| **`<img alt="...">`** | The image appears correctly in **image search**, and the alt text adds context to the page |
+| **`<title>` + `<meta name="description">`** | The title is a key ranking and click signal; the description often becomes the **search snippet** |
+| **`<time datetime>`, `<address>`, lists, tables** | Machine-readable dates, contact info and structured data |
+| **Structured data (JSON-LD)** | Enables **rich results** (price, rating, stock, FAQs, breadcrumbs) |
+| **Server-rendered HTML** | Content in the initial HTML is indexed reliably; content that only appears after client-side JavaScript may be indexed late or incompletely |
+| **`lang` attribute, `hreflang`, canonical URL** | Right language and country versions; no duplicate-content dilution |
+
+```html
+<head>
+  <title>Trail Runner 2 — Lightweight Running Shoes | MyShop</title>
+  <meta name="description" content="Lightweight trail shoes with a grippy sole. Free delivery and 30-day returns." />
+  <link rel="canonical" href="https://myshop.com/p/trail-runner-2" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": "Trail Runner 2",
+      "image": "https://myshop.com/img/trail-runner-2.jpg",
+      "offers": { "@type": "Offer", "price": "89.99", "priceCurrency": "GBP", "availability": "https://schema.org/InStock" }
+    }
+  </script>
+</head>
+```
+
+**Honest note:** semantic tags alone don't make a page rank. Content quality and links matter most. But semantic HTML makes the content **understandable and crawlable**, it's the foundation of good **Core Web Vitals and accessibility** (which also affect search visibility), and it costs nothing.
+
+---
+
+## Accessibility & ARIA impact
+
+**Screen readers build an "accessibility tree" from your HTML.** Semantic elements give it roles, names and states **for free**:
+
+| HTML | What a screen reader user gets |
+|---|---|
+| `<header>`, `<nav>`, `<main>`, `<aside>`, `<footer>` | **Landmarks**: jump straight to "main" or "navigation" with one key |
+| `<h1>`–`<h6>` | **A list of headings to skim** (the most common way blind users scan a page) |
+| `<button>` | Announced as "button", focusable, works with Enter and Space |
+| `<a href>` | Announced as "link", in the links list |
+| `<label for>` + `<input>` | The field's name is read when it's focused |
+| `<ul>`/`<ol>` | "List, 5 items" |
+| `<table>` + `<th>` | Row and column headers read with each cell |
+
+**ARIA (Accessible Rich Internet Applications)** adds roles, states and properties **when HTML has no native element** for the widget:
+
+```html
+<!-- native first: no ARIA needed -->
+<button type="button">Add to cart</button>
+
+<!-- ARIA for things HTML can't express -->
+<button aria-expanded="false" aria-controls="filters">Filters</button>   <!-- toggle state -->
+<button aria-label="Close">✕</button>                                     <!-- name for an icon button -->
+<div role="status" aria-live="polite">Added to cart</div>                <!-- announce updates -->
+<nav aria-label="Breadcrumb">…</nav>                                      <!-- tell two navs apart -->
+```
+
+**The first rule of ARIA:** don't use ARIA if a native element can do the job. **"No ARIA is better than bad ARIA"**: a wrong `role` makes things worse. (See the **Accessibility basics** question for more.)
+
+**Overlap:** most of what helps screen readers also helps search engines. Both are "users" that can't see the page and rely on structure, text alternatives and real links.
+
+---
+
 ## Quick Q&A
 
 **Q: What is semantic HTML? Why use it?**
@@ -154,6 +225,12 @@ Tells the browser to render in standards mode instead of quirks mode.
 
 **Q: What are `data-*` attributes?**
 Custom attributes for storing extra data on elements, read in JS through `element.dataset`.
+
+**Q: How does semantic HTML affect SEO?**
+A clear heading outline, main and article landmarks, real crawlable `<a href>` links with descriptive text, alt text, a title and meta description, structured data and server-rendered HTML all help search engines understand and index the content. It's not a ranking trick by itself, but it's the foundation.
+
+**Q: When do you need ARIA?**
+Only when native HTML can't express something: states like `aria-expanded`, labels for icon-only buttons, live regions for announcements, or custom widgets. Native elements come first.
 
 ---
 
