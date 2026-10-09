@@ -11,7 +11,7 @@
 - **Changing the channel (URL)** just shows a different programme (component). You don't buy a new TV each time.
 - **The remote's channel list** = your **routes**: `/` = Home, `/about` = About.
 
-> **Versions:** in **v6**, you import from `'react-router-dom'`. In **v7** (current), the same APIs come from `'react-router'`. The code is the same.
+> **Versions:** in **v6**, you import from `'react-router-dom'`. From **v7 onwards** (this project uses v8), the same APIs come from `'react-router'`. The code is the same.
 
 ---
 

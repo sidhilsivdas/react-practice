@@ -30,6 +30,8 @@ import bigLists from '../questions/big-lists.md?raw'
 import redux from '../questions/redux.md?raw'
 import reactRouter from '../questions/react-router.md?raw'
 import useLocationQ from '../questions/uselocation.md?raw'
+import packageJsonProd from '../questions/package-json-production.md?raw'
+import buildTools from '../questions/build-tools-babel-webpack-vite.md?raw'
 import nodeHowItWorks from '../questions/node-how-it-works.md?raw'
 import nodeNextTick from '../questions/node-nexttick-process.md?raw'
 import nodeThreadPool from '../questions/node-thread-pool-blocking.md?raw'
@@ -195,6 +197,16 @@ const questions = [
     id: 'uselocation',
     title: 'useLocation: query params & navigation state',
     content: useLocationQ,
+  },
+  {
+    id: 'package-json-production',
+    title: 'package.json in a production React app',
+    content: packageJsonProd,
+  },
+  {
+    id: 'build-tools-babel-webpack-vite',
+    title: 'Babel, Webpack & why Vite came',
+    content: buildTools,
   },
   {
     id: 'node-how-it-works',
