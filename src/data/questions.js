@@ -27,6 +27,8 @@ import jsxKeys from '../questions/jsx-keys.md?raw'
 import stateProps from '../questions/state-props.md?raw'
 import useStateUseEffect from '../questions/usestate-useeffect.md?raw'
 import classVsFunction from '../questions/class-vs-function.md?raw'
+import higherOrderComponents from '../questions/higher-order-components.md?raw'
+import pureComponents from '../questions/pure-components.md?raw'
 import childStateRefs from '../questions/child-state-refs.md?raw'
 import bigLists from '../questions/big-lists.md?raw'
 import redux from '../questions/redux.md?raw'
@@ -233,6 +235,16 @@ const questions = [
     id: 'class-vs-function',
     title: 'Class vs function components (lifecycle vs hooks)',
     content: classVsFunction,
+  },
+  {
+    id: 'higher-order-components',
+    title: 'Higher-Order Components (HOC)',
+    content: higherOrderComponents,
+  },
+  {
+    id: 'pure-components',
+    title: 'Pure components: PureComponent, React.memo & pure rendering',
+    content: pureComponents,
   },
   {
     id: 'child-state-refs',
