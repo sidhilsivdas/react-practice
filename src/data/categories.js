@@ -8,6 +8,12 @@ const categories = [
     description: 'React concepts and core JavaScript.',
   },
   {
+    id: 'typescript',
+    title: 'TypeScript',
+    icon: '🔷',
+    description: 'Types, generics and TypeScript with React and Node.',
+  },
+  {
     id: 'html-css',
     title: 'HTML & CSS',
     icon: '🎨',

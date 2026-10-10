@@ -83,6 +83,18 @@ import sdLeadership from '../questions/sd-fe-mentoring-leadership.md?raw'
 import sdEcommerce from '../questions/sd-fe-design-ecommerce.md?raw'
 import sdFastify from '../questions/sd-be-fastify.md?raw'
 import faReactRedux from '../questions/fa-react-redux-architecture.md?raw'
+import sdDuplicateSubmissions from '../questions/sd-be-duplicate-submissions.md?raw'
+import tsWhatWhy from '../questions/ts-what-why.md?raw'
+import tsBasicTypes from '../questions/ts-basic-types.md?raw'
+import tsInterfaceVsType from '../questions/ts-interface-vs-type.md?raw'
+import tsUnionsNarrowing from '../questions/ts-unions-narrowing.md?raw'
+import tsGenerics from '../questions/ts-generics.md?raw'
+import tsUtilityTypes from '../questions/ts-utility-types.md?raw'
+import tsAdvancedTypes from '../questions/ts-advanced-types.md?raw'
+import tsClassesEnums from '../questions/ts-classes-enums.md?raw'
+import tsReact from '../questions/ts-react.md?raw'
+import tsTsconfigTooling from '../questions/ts-tsconfig-tooling.md?raw'
+import tsInterviewQuestions from '../questions/ts-interview-questions.md?raw'
 import fa01MicroFrontends from '../questions/fa-01-micro-frontends.md?raw'
 import fa02SpaToSsr from '../questions/fa-02-spa-to-ssr.md?raw'
 import fa03Monorepo from '../questions/fa-03-monorepo.md?raw'
@@ -560,6 +572,13 @@ const questions = [
     content: sdFastify,
   },
   {
+    id: 'sd-be-duplicate-submissions',
+    title: 'Preventing duplicate form submissions (React + Node, idempotency keys)',
+    category: 'system-design',
+    section: 'backend',
+    content: sdDuplicateSubmissions,
+  },
+  {
     id: 'fa-react-redux-architecture',
     title: 'Production React + Redux architecture & folder structure',
     category: 'frontend-architecture',
@@ -660,6 +679,72 @@ const questions = [
     title: 'Securing React against XSS',
     category: 'frontend-architecture',
     content: fa16Xss,
+  },
+  {
+    id: 'ts-what-why',
+    title: "What is TypeScript & why use it (type erasure, structural typing)",
+    category: 'typescript',
+    content: tsWhatWhy,
+  },
+  {
+    id: 'ts-basic-types',
+    title: "Basic types: any vs unknown vs never, literals, tuples, inference",
+    category: 'typescript',
+    content: tsBasicTypes,
+  },
+  {
+    id: 'ts-interface-vs-type',
+    title: "interface vs type",
+    category: 'typescript',
+    content: tsInterfaceVsType,
+  },
+  {
+    id: 'ts-unions-narrowing',
+    title: "Unions, narrowing & discriminated unions",
+    category: 'typescript',
+    content: tsUnionsNarrowing,
+  },
+  {
+    id: 'ts-generics',
+    title: "Generics (constraints, keyof, generic components)",
+    category: 'typescript',
+    content: tsGenerics,
+  },
+  {
+    id: 'ts-utility-types',
+    title: "Utility types (Partial, Pick, Omit, Record, ReturnType…)",
+    category: 'typescript',
+    content: tsUtilityTypes,
+  },
+  {
+    id: 'ts-advanced-types',
+    title: "Advanced types: mapped, conditional, infer, satisfies, branded",
+    category: 'typescript',
+    content: tsAdvancedTypes,
+  },
+  {
+    id: 'ts-classes-enums',
+    title: "Classes, access modifiers & enums (and their alternatives)",
+    category: 'typescript',
+    content: tsClassesEnums,
+  },
+  {
+    id: 'ts-react',
+    title: "TypeScript with React (props, state, refs, events, context)",
+    category: 'typescript',
+    content: tsReact,
+  },
+  {
+    id: 'ts-tsconfig-tooling',
+    title: "tsconfig, strict mode, .d.ts files & TypeScript in Node",
+    category: 'typescript',
+    content: tsTsconfigTooling,
+  },
+  {
+    id: 'ts-interview-questions',
+    title: "TypeScript rapid-fire interview questions",
+    category: 'typescript',
+    content: tsInterviewQuestions,
   },
 ]
 
