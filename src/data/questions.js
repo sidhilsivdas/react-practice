@@ -11,6 +11,7 @@ import reRenderCauses from '../questions/re-render-causes.md?raw'
 import memoUseCallback from '../questions/memo-usecallback.md?raw'
 import customHooks from '../questions/custom-hooks.md?raw'
 import reactCompiler from '../questions/react-compiler.md?raw'
+import reactOptimization from '../questions/react-optimization.md?raw'
 import spreadRest from '../questions/spread-rest.md?raw'
 import strictMode from '../questions/strict-mode.md?raw'
 import react18And19 from '../questions/react-18-19.md?raw'
@@ -157,6 +158,11 @@ const questions = [
     id: 'react-compiler',
     title: 'React Compiler',
     content: reactCompiler,
+  },
+  {
+    id: 'react-optimization',
+    title: 'React app optimization techniques (complete guide)',
+    content: reactOptimization,
   },
   {
     id: 'spread-rest',
