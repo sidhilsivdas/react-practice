@@ -15,6 +15,7 @@ import spreadRest from '../questions/spread-rest.md?raw'
 import strictMode from '../questions/strict-mode.md?raw'
 import react18And19 from '../questions/react-18-19.md?raw'
 import typeCoercion from '../questions/type-coercion.md?raw'
+import dataTypesGc from '../questions/data-types-garbage-collection.md?raw'
 import thisKeyword from '../questions/this-keyword.md?raw'
 import eventLoopBrowser from '../questions/event-loop-browser.md?raw'
 import eventLoopNode from '../questions/event-loop-node.md?raw'
@@ -164,6 +165,11 @@ const questions = [
     id: 'type-coercion',
     title: 'Type coercion (== vs ===, truthy & falsy)',
     content: typeCoercion,
+  },
+  {
+    id: 'data-types-garbage-collection',
+    title: 'Data types & garbage collection (stack vs heap, mark-and-sweep)',
+    content: dataTypesGc,
   },
   {
     id: 'this-keyword',
