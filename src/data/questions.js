@@ -99,6 +99,8 @@ import tsReact from '../questions/ts-react.md?raw'
 import tsTsconfigTooling from '../questions/ts-tsconfig-tooling.md?raw'
 import tsInterviewQuestions from '../questions/ts-interview-questions.md?raw'
 import nxWhatWhy from '../questions/nx-what-why.md?raw'
+import nxVersionsTrends from '../questions/nx-versions-trends.md?raw'
+import nxSsrIsr from '../questions/nx-ssr-isr-deep-dive.md?raw'
 import nxRouting from '../questions/nx-routing.md?raw'
 import nxServerClient from '../questions/nx-server-client-components.md?raw'
 import nxRendering from '../questions/nx-rendering.md?raw'
@@ -784,6 +786,12 @@ const questions = [
     content: nxWhatWhy,
   },
   {
+    id: 'nx-versions-trends',
+    title: "Next.js versions history, major changes in 16.x & current trends",
+    category: 'nextjs',
+    content: nxVersionsTrends,
+  },
+  {
     id: 'nx-routing',
     title: "App Router routing: special files, dynamic, parallel & intercepting routes",
     category: 'nextjs',
@@ -800,6 +808,12 @@ const questions = [
     title: "Rendering: static, dynamic, ISR, streaming & Partial Prerendering",
     category: 'nextjs',
     content: nxRendering,
+  },
+  {
+    id: 'nx-ssr-isr-deep-dive',
+    title: "SSR & ISR in depth, with real companies using them",
+    category: 'nextjs',
+    content: nxSsrIsr,
   },
   {
     id: 'nx-caching',
