@@ -98,6 +98,19 @@ import tsClassesEnums from '../questions/ts-classes-enums.md?raw'
 import tsReact from '../questions/ts-react.md?raw'
 import tsTsconfigTooling from '../questions/ts-tsconfig-tooling.md?raw'
 import tsInterviewQuestions from '../questions/ts-interview-questions.md?raw'
+import nxWhatWhy from '../questions/nx-what-why.md?raw'
+import nxRouting from '../questions/nx-routing.md?raw'
+import nxServerClient from '../questions/nx-server-client-components.md?raw'
+import nxRendering from '../questions/nx-rendering.md?raw'
+import nxCaching from '../questions/nx-caching.md?raw'
+import nxDataFetching from '../questions/nx-data-fetching.md?raw'
+import nxServerActions from '../questions/nx-server-actions.md?raw'
+import nxRouteHandlersProxy from '../questions/nx-route-handlers-proxy.md?raw'
+import nxAuthSecurity from '../questions/nx-auth-security.md?raw'
+import nxOptimizations from '../questions/nx-optimizations.md?raw'
+import nxDeployment from '../questions/nx-deployment.md?raw'
+import nxPagesRouter from '../questions/nx-pages-router-migration.md?raw'
+import nxInterviewQuestions from '../questions/nx-interview-questions.md?raw'
 import fa01MicroFrontends from '../questions/fa-01-micro-frontends.md?raw'
 import fa02SpaToSsr from '../questions/fa-02-spa-to-ssr.md?raw'
 import fa03Monorepo from '../questions/fa-03-monorepo.md?raw'
@@ -763,6 +776,84 @@ const questions = [
     title: "TypeScript rapid-fire interview questions",
     category: 'typescript',
     content: tsInterviewQuestions,
+  },
+  {
+    id: 'nx-what-why',
+    title: "What is Next.js, why use it & what's new in Next.js 16",
+    category: 'nextjs',
+    content: nxWhatWhy,
+  },
+  {
+    id: 'nx-routing',
+    title: "App Router routing: special files, dynamic, parallel & intercepting routes",
+    category: 'nextjs',
+    content: nxRouting,
+  },
+  {
+    id: 'nx-server-client-components',
+    title: "Server vs Client Components, \"use client\" & hydration",
+    category: 'nextjs',
+    content: nxServerClient,
+  },
+  {
+    id: 'nx-rendering',
+    title: "Rendering: static, dynamic, ISR, streaming & Partial Prerendering",
+    category: 'nextjs',
+    content: nxRendering,
+  },
+  {
+    id: 'nx-caching',
+    title: "Caching: \"use cache\", cacheLife, revalidation & the previous model",
+    category: 'nextjs',
+    content: nxCaching,
+  },
+  {
+    id: 'nx-data-fetching',
+    title: "Data fetching, waterfalls & React.cache",
+    category: 'nextjs',
+    content: nxDataFetching,
+  },
+  {
+    id: 'nx-server-actions',
+    title: "Server Actions: forms, useActionState & security",
+    category: 'nextjs',
+    content: nxServerActions,
+  },
+  {
+    id: 'nx-route-handlers-proxy',
+    title: "Route Handlers & Proxy (formerly Middleware)",
+    category: 'nextjs',
+    content: nxRouteHandlersProxy,
+  },
+  {
+    id: 'nx-auth-security',
+    title: "Authentication, authorization & security (DAL, sessions, CVEs)",
+    category: 'nextjs',
+    content: nxAuthSecurity,
+  },
+  {
+    id: 'nx-optimizations',
+    title: "Optimizations: next/image, next/font, next/script, metadata & SEO",
+    category: 'nextjs',
+    content: nxOptimizations,
+  },
+  {
+    id: 'nx-deployment',
+    title: "Deployment & self-hosting (Docker, multi-instance, env vars, runtimes)",
+    category: 'nextjs',
+    content: nxDeployment,
+  },
+  {
+    id: 'nx-pages-router-migration',
+    title: "Pages Router & migrating to the App Router",
+    category: 'nextjs',
+    content: nxPagesRouter,
+  },
+  {
+    id: 'nx-interview-questions',
+    title: "Next.js interview questions & scenarios (rapid-fire)",
+    category: 'nextjs',
+    content: nxInterviewQuestions,
   },
 ]
 

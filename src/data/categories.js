@@ -14,6 +14,12 @@ const categories = [
     description: 'Types, generics and TypeScript with React and Node.',
   },
   {
+    id: 'nextjs',
+    title: 'Next.js',
+    icon: '🚀',
+    description: 'The App Router, Server Components, caching and deployment (Next.js 16).',
+  },
+  {
     id: 'html-css',
     title: 'HTML & CSS',
     icon: '🎨',
