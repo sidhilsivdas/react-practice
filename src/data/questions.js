@@ -87,6 +87,7 @@ import sdEcommerce from '../questions/sd-fe-design-ecommerce.md?raw'
 import sdFastify from '../questions/sd-be-fastify.md?raw'
 import faReactRedux from '../questions/fa-react-redux-architecture.md?raw'
 import sdDuplicateSubmissions from '../questions/sd-be-duplicate-submissions.md?raw'
+import sdYtAmazon from '../questions/sd-yt-amazon-flipkart.md?raw'
 import tsWhatWhy from '../questions/ts-what-why.md?raw'
 import tsBasicTypes from '../questions/ts-basic-types.md?raw'
 import tsInterfaceVsType from '../questions/ts-interface-vs-type.md?raw'
@@ -610,6 +611,13 @@ const questions = [
     category: 'system-design',
     section: 'backend',
     content: sdDuplicateSubmissions,
+  },
+  {
+    id: 'sd-yt-amazon-flipkart',
+    title: 'Design Amazon / Flipkart (video notes: Jordan has no life)',
+    category: 'system-design',
+    section: 'youtube',
+    content: sdYtAmazon,
   },
   {
     id: 'fa-react-redux-architecture',
