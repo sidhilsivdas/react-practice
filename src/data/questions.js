@@ -88,6 +88,7 @@ import sdFastify from '../questions/sd-be-fastify.md?raw'
 import faReactRedux from '../questions/fa-react-redux-architecture.md?raw'
 import sdDuplicateSubmissions from '../questions/sd-be-duplicate-submissions.md?raw'
 import sdYtAmazon from '../questions/sd-yt-amazon-flipkart.md?raw'
+import sdYtTicketmaster from '../questions/sd-yt-ticketmaster.md?raw'
 import tsWhatWhy from '../questions/ts-what-why.md?raw'
 import tsBasicTypes from '../questions/ts-basic-types.md?raw'
 import tsInterfaceVsType from '../questions/ts-interface-vs-type.md?raw'
@@ -618,6 +619,13 @@ const questions = [
     category: 'system-design',
     section: 'youtube',
     content: sdYtAmazon,
+  },
+  {
+    id: 'sd-yt-ticketmaster',
+    title: 'Design Ticketmaster (video notes: Hello Interview)',
+    category: 'system-design',
+    section: 'youtube',
+    content: sdYtTicketmaster,
   },
   {
     id: 'fa-react-redux-architecture',
