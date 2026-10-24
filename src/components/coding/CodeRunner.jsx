@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { runCode } from '../../utils/runCode.js'
+import { runTs } from '../../utils/runTs.js'
 import { formatValue } from '../../utils/formatValue.js'
 import CodeEditor from './CodeEditor.jsx'
 
@@ -20,6 +21,44 @@ function saveDraft(id, code) {
   }
 }
 
+// One row per test: TypeScript problems get "no type errors" + the type tests first,
+// then the JS tests (which run on the type-stripped code)
+function resultItems(problem, result) {
+  const items = []
+  if (problem.language === 'ts') {
+    const count = result.typeErrors?.length ?? 0
+    items.push({
+      kind: 'types',
+      label: 'Your code has no type errors',
+      pass: count === 0,
+      detail: `${count} type error${count === 1 ? '' : 's'} (see below)`,
+    })
+    if (problem.noAny) {
+      const lines = result.anyLines ?? []
+      items.push({
+        kind: 'types',
+        label: 'No `any` left in your code',
+        pass: !!result.anyLines && lines.length === 0,
+        detail: `\`any\` on line ${lines.join(', ')}`,
+      })
+    }
+    problem.typeTests.forEach((test, i) => {
+      const r = result.typeResults?.[i]
+      items.push({ kind: 'types', label: test.label, pass: !!r?.pass, detail: r?.output })
+    })
+  }
+  problem.tests.forEach((test, i) => {
+    const r = result.results?.[i]
+    items.push({
+      kind: problem.language === 'ts' ? 'runtime' : null,
+      label: test.label ?? `${problem.functionName}(${test.args.map((a) => formatValue(a, true)).join(', ')})`,
+      pass: !!r?.pass,
+      detail: r ? `expected ${formatValue(test.expected, true)} · got ${r.output}` : 'not run',
+    })
+  })
+  return items
+}
+
 // Code editor + Run button + test results
 function CodeRunner({ problem }) {
   const [code, setCode] = useState(() => loadDraft(problem.id) ?? problem.starter)
@@ -33,7 +72,10 @@ function CodeRunner({ problem }) {
 
   async function handleRun() {
     setRunning(true)
-    const output = await runCode({ code, functionName: problem.functionName, tests: problem.tests })
+    const output =
+      problem.language === 'ts'
+        ? await runTs({ code, tsx: problem.tsx, functionName: problem.functionName, tests: problem.tests, typeTests: problem.typeTests })
+        : await runCode({ code, functionName: problem.functionName, tests: problem.tests })
     setResult(output)
     setRunning(false)
   }
@@ -43,8 +85,9 @@ function CodeRunner({ problem }) {
     setResult(null)
   }
 
-  const passed = result?.results?.filter((r) => r.pass).length ?? 0
-  const total = problem.tests.length
+  const items = result ? resultItems(problem, result) : []
+  const passed = items.filter((item) => item.pass).length
+  const total = items.length
 
   return (
     <section className="mt-10 rounded-lg border border-gray-200 bg-white shadow-sm">
@@ -67,40 +110,49 @@ function CodeRunner({ problem }) {
       <CodeEditor value={code} onChange={updateCode} onRun={handleRun} label="Code editor" />
       <p className="border-t border-gray-200 px-4 py-2 text-xs text-gray-500">
         Tab indents · Ctrl+Enter runs · your code is saved in this browser
+        {problem.language === 'ts' && ' · type-checked with TypeScript (strict), the first run loads the compiler'}
       </p>
 
       {result && (
         <div className="border-t border-gray-200 px-4 py-4">
-          {result.error ? (
-            <p className="rounded bg-red-50 px-3 py-2 font-mono text-sm text-red-800">❌ {result.error}</p>
-          ) : (
+          {result.error && (
+            <p className="mb-3 rounded bg-red-50 px-3 py-2 font-mono text-sm text-red-800">❌ {result.error}</p>
+          )}
+          {(!result.error || result.typeResults) && (
             <>
               <p className={`font-semibold ${passed === total ? 'text-green-700' : 'text-amber-700'}`}>
                 {passed === total ? '🎉 ' : ''}
                 {passed} / {total} tests passed
               </p>
               <ul className="mt-3 space-y-2">
-                {result.results.map((r, i) => {
-                  const test = problem.tests[i]
-                  return (
-                    <li
-                      key={i}
-                      className={`rounded border px-3 py-2 font-mono text-xs ${r.pass ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}
-                    >
-                      <div className="break-all">
-                        {r.pass ? '✅' : '❌'}{' '}
-                        {test.label ?? `${problem.functionName}(${test.args.map((a) => formatValue(a, true)).join(', ')})`}
-                      </div>
-                      {!r.pass && (
-                        <div className="mt-1 break-all pl-6 text-gray-700">
-                          expected {formatValue(test.expected, true)} · got {r.output}
-                        </div>
+                {items.map((item, i) => (
+                  <li
+                    key={i}
+                    className={`rounded border px-3 py-2 font-mono text-xs ${item.pass ? 'border-green-200 bg-green-50' : 'border-red-200 bg-red-50'}`}
+                  >
+                    <div className="break-all">
+                      {item.pass ? '✅' : '❌'}{' '}
+                      {item.kind && (
+                        <span className={`mr-1 rounded px-1.5 py-0.5 font-sans text-[10px] font-semibold uppercase ${item.kind === 'types' ? 'bg-blue-100 text-blue-800' : 'bg-gray-200 text-gray-700'}`}>
+                          {item.kind}
+                        </span>
                       )}
-                    </li>
-                  )
-                })}
+                      {item.label}
+                    </div>
+                    {!item.pass && item.detail && <div className="mt-1 break-all pl-6 text-gray-700">{item.detail}</div>}
+                  </li>
+                ))}
               </ul>
             </>
+          )}
+
+          {result.typeErrors?.length > 0 && (
+            <div className="mt-4">
+              <p className="text-xs font-medium text-gray-500">Type errors</p>
+              <pre className="mt-1 overflow-x-auto whitespace-pre-wrap rounded bg-gray-900 p-3 text-xs leading-5 text-red-300">
+                {result.typeErrors.join('\n\n')}
+              </pre>
+            </div>
           )}
 
           {result.logs?.length > 0 && (

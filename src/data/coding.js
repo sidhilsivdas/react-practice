@@ -6,15 +6,22 @@
 //    { label, run: '...code...', expected }  → an async script using the function by name
 //                                             (for callbacks, timers, promises, classes)
 //
+// TypeScript practice uses <id>.starter.ts (or .starter.tsx for React) instead of .starter.js.
+// The code is type-checked (strict) and can also have `typeTests`: { label, code } snippets
+// added after the user's code, using Expect<Equal<A, B>> or a `// @ts-expect-error` line
+// (see utils/tsCheck.js). `tests` then run on the type-stripped JS, like the JS problems.
+//
 // HTML & CSS practice (type: 'html') uses <id>.starter.html + <id>.starter.css instead,
 // and `checks`: { label, run } where run gets (doc, win, setViewport) and returns
 // true to pass, or a string explaining what's wrong (see utils/runHtmlChecks.js).
 import { getSections } from '../utils/sections.js'
+import codingTs from './codingTs.js'
 
 // every src/coding/*.md and starter file, as text
 // (Vite reads these options at build time, so they must be written inline)
 const markdown = import.meta.glob('../coding/*.md', { query: '?raw', import: 'default', eager: true })
 const starters = import.meta.glob('../coding/*.starter.js', { query: '?raw', import: 'default', eager: true })
+const startersTs = import.meta.glob('../coding/*.starter.{ts,tsx}', { query: '?raw', import: 'default', eager: true })
 const starterHtml = import.meta.glob('../coding/*.starter.html', { query: '?raw', import: 'default', eager: true })
 const starterCss = import.meta.glob('../coding/*.starter.css', { query: '?raw', import: 'default', eager: true })
 
@@ -676,10 +683,20 @@ return d.scrollHeight > d.clientHeight || 'The text should be longer than two li
   },
 ]
 
+coding.push(...codingTs)
+
 for (const problem of coding) {
   problem.category ??= 'react-js'
   problem.content = markdown[`../coding/${problem.id}.md`]
   problem.starter = starters[`../coding/${problem.id}.starter.js`]
+  const tsStarter = startersTs[`../coding/${problem.id}.starter.ts`] ?? startersTs[`../coding/${problem.id}.starter.tsx`]
+  if (tsStarter !== undefined) {
+    problem.language = 'ts'
+    problem.tsx = `../coding/${problem.id}.starter.tsx` in startersTs
+    problem.starter = tsStarter
+    problem.typeTests ??= []
+    problem.tests ??= []
+  }
   problem.starterHtml = starterHtml[`../coding/${problem.id}.starter.html`]
   problem.starterCss = starterCss[`../coding/${problem.id}.starter.css`]
   const [problemPart, solutionPart = ''] = problem.content.split(SOLUTION_MARKER)
