@@ -88,6 +88,7 @@ import sdFastify from '../questions/sd-be-fastify.md?raw'
 import fa00RoleBasedAuth from '../questions/fa-00-role-based-auth.md?raw'
 import faReactRedux from '../questions/fa-react-redux-architecture.md?raw'
 import sdDuplicateSubmissions from '../questions/sd-be-duplicate-submissions.md?raw'
+import sdAuthTokens from '../questions/sd-be-auth-tokens-sessions.md?raw'
 import sdYtAmazon from '../questions/sd-yt-amazon-flipkart.md?raw'
 import sdYtTicketmaster from '../questions/sd-yt-ticketmaster.md?raw'
 import sdYtUber from '../questions/sd-yt-uber.md?raw'
@@ -614,6 +615,13 @@ const questions = [
     category: 'system-design',
     section: 'backend',
     content: sdDuplicateSubmissions,
+  },
+  {
+    id: 'sd-be-auth-tokens-sessions',
+    title: 'Auth for React + NestJS on Kubernetes (JWT, refresh tokens, Redis sessions, Microsoft SSO)',
+    category: 'system-design',
+    section: 'backend',
+    content: sdAuthTokens,
   },
   {
     id: 'sd-yt-amazon-flipkart',
