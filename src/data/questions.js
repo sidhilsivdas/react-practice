@@ -85,6 +85,7 @@ import sdCollab from '../questions/sd-fe-collaboration-devops.md?raw'
 import sdLeadership from '../questions/sd-fe-mentoring-leadership.md?raw'
 import sdEcommerce from '../questions/sd-fe-design-ecommerce.md?raw'
 import sdFastify from '../questions/sd-be-fastify.md?raw'
+import fa00RoleBasedAuth from '../questions/fa-00-role-based-auth.md?raw'
 import faReactRedux from '../questions/fa-react-redux-architecture.md?raw'
 import sdDuplicateSubmissions from '../questions/sd-be-duplicate-submissions.md?raw'
 import sdYtAmazon from '../questions/sd-yt-amazon-flipkart.md?raw'
@@ -634,6 +635,12 @@ const questions = [
     category: 'system-design',
     section: 'youtube',
     content: sdYtUber,
+  },
+  {
+    id: 'fa-00-role-based-auth',
+    title: 'Role-based authentication & protected routes (video notes: Cosden Solutions)',
+    category: 'frontend-architecture',
+    content: fa00RoleBasedAuth,
   },
   {
     id: 'fa-react-redux-architecture',
