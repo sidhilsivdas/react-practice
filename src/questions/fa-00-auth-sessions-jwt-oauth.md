@@ -249,6 +249,103 @@ A JWT has **3 parts**, base64url-encoded and joined by dots: `xxxxx.yyyyy.zzzzz`
 
 ---
 
+## 💭 Step 4c: SAML vs OIDC, and the OIDC flows
+
+*(My addition: the video only mentions OIDC briefly.)*
+
+### SAML vs OIDC
+
+Both do the same job, **Single Sign-On** between an **IdP** and many apps (**SPs**). They just do it differently:
+
+| | **SAML 2.0** | **OpenID Connect (OIDC)** |
+|---|---|---|
+| **Age** | 2005, the enterprise veteran | 2014, the modern one |
+| **Built on** | Its own XML standard | **OAuth 2.0** (adds a login layer on top) |
+| **Proof of login** | **SAML assertion**: signed **XML** | **ID token**: a signed **JWT** (JSON) |
+| **How the proof travels** | Browser **POSTs** a form to the app's ACS URL | Browser brings back a **code**; the app swaps it for tokens over a back channel |
+| **Setup** | Exchange **metadata XML** files and certificates | `client_id`, redirect URI, and `/.well-known/openid-configuration` |
+| **SPAs and mobile** | ❌ Awkward (built for browser form posts) | ✅ Built for them (Code + PKCE) |
+| **Can also call APIs** | ❌ Login only | ✅ You also get an **access token** |
+| **Where you see it** | Corporate apps: Salesforce, Workday, older internal tools | New apps, "Sign in with Google", mobile, SPAs |
+
+**Analogy:** SAML is a **paper passport with a wax seal**: trusted everywhere in big companies, but bulky. OIDC is an **e-passport with a chip**: the same trust, lighter, and it works with phones.
+
+**Rule of thumb:** **OIDC for new apps**; **SAML when an enterprise customer's IdP or an existing app requires it**. Most IdPs (Entra ID, Okta, Auth0, Keycloak) support both.
+
+### The OIDC flows
+
+A "flow" is **how the app gets the tokens**. Strictly, OIDC defines three (Authorization Code, Implicit, Hybrid); the others are **OAuth 2.0 grants** used alongside it.
+
+| Flow | Who uses it | User involved? | Status |
+|---|---|---|---|
+| **Authorization Code + PKCE** | Web apps, SPAs, mobile, desktop | ✅ | ✅ **The default, use this** |
+| **Implicit** | Old SPAs | ✅ | ❌ **Deprecated** |
+| **Hybrid** | Server apps that want the ID token immediately | ✅ | ⚠️ Rare, legacy |
+| **Client Credentials** | Service ↔ service (cron jobs, microservices) | ❌ No user | ✅ For machines (OAuth, no ID token) |
+| **Device Authorization** | TVs, CLIs, IoT (no proper keyboard) | ✅ on another device | ✅ |
+| **Refresh Token** | Any of the above | ❌ Silent | ✅ For renewing tokens |
+| **ROPC** (password grant) | App collects the password itself | ✅ | ❌ **Deprecated** |
+
+**1. Authorization Code + PKCE ✅ (learn this one well)**
+
+```
+ App                                Browser                 IdP
+  │ ① create code_verifier (random)   │                       │
+  │   code_challenge = SHA256(verifier)                       │
+  │ ② redirect ─────────────────────► │ /authorize?           │
+  │                                   │  response_type=code   │
+  │                                   │  &scope=openid profile│
+  │                                   │  &code_challenge=…    │
+  │                                   │  &state=xyz ─────────►│ ③ user logs in
+  │                                   │ ◄── ?code=abc&state=xyz
+  │ ◄──────────────────────────────── │                       │
+  │ ④ POST /token  code=abc + code_verifier ─────────────────►│ checks SHA256(verifier)
+  │ ◄──────────── ⑤ ID token + access token (+ refresh token) │   == challenge ✅
+```
+
+| Detail | Why |
+|---|---|
+| Browser only sees a **short-lived code** | Tokens never appear in the URL; they come over a direct back channel |
+| **PKCE** (`code_verifier` / `code_challenge`) | A stolen code is useless without the verifier, which never left the app |
+| **`state`** | Protects against CSRF: the response must match the request the app sent |
+| **`nonce`** (inside the ID token) | Protects against replaying an old ID token |
+| `client_secret` at step ④ | Only for **server** apps; SPAs and mobile can't keep secrets, so they rely on PKCE |
+| `scope=openid` | This is what turns an OAuth request into an **OIDC** login (you get an ID token) |
+
+**2. Implicit ❌ (deprecated):** the IdP put the tokens **straight in the URL** (`#id_token=…&access_token=…`). They leak through browser history, logs and the `Referer` header, and there's no PKCE. It existed because old browsers couldn't make cross-origin token calls. **Code + PKCE replaced it.**
+
+**3. Hybrid ⚠️:** `response_type=code id_token`. The app gets the **ID token right away** in the front channel (to show who logged in), then **swaps the code** for the access token on the back channel. Mostly seen in older .NET setups.
+
+**4. Client Credentials (machines only):**
+
+```
+ Order service ── client_id + secret ──► IdP ──► access token ──► Payment API
+```
+
+No user, so **no ID token**: it's pure OAuth. Use it for backend jobs and service-to-service calls.
+
+**5. Device Authorization (TVs and CLIs):**
+
+```
+ TV: "Go to microsoft.com/devicelogin and enter code: WDJB-MJHT"
+ You (on your phone): enter the code → log in → approve
+ TV: polls the IdP → gets the tokens ✅
+```
+
+Used by `az login --use-device-code`, Netflix on a TV, and the GitHub CLI.
+
+**6. Refresh Token:**
+
+```
+ App ── refresh_token ──► IdP ──► new access token (+ new refresh token if rotation is on)
+```
+
+The user stays logged in without seeing the login screen again. Turn on **rotation and reuse detection**: if an old refresh token is used again, the IdP revokes the whole token family.
+
+**7. ROPC ❌ (deprecated):** the app shows its **own** password form and sends the password to the IdP. That defeats the main point of an IdP (the app should never see the password), and it breaks MFA and SSO.
+
+---
+
 ## Step 5: compare them with 4 questions
 
 | Question | Sessions | JWT | OAuth |
@@ -386,6 +483,12 @@ The video focuses on server-rendered apps and mobile. For a **React SPA**, the c
 | SP (Service Provider) | The app you use; trusts the IdP's proof, never sees the password |
 | SSO | One IdP login, many SPs |
 | SAML vs OIDC names | SP/IdP + XML assertion vs RP/OP + ID token (JWT) |
+| SAML vs OIDC choice | OIDC for new apps; SAML when an enterprise IdP/app requires it |
+| User login flow | Authorization Code + PKCE (everywhere) |
+| Deprecated flows | Implicit (tokens in URL), ROPC (app sees the password) |
+| Machine-to-machine | Client Credentials (no user, no ID token) |
+| TVs / CLIs | Device Authorization flow (enter a code on your phone) |
+| `state` / `nonce` | Stop CSRF / stop ID-token replay |
 | Opaque token | Random string, checked by asking the auth server |
 | Default for web apps | Sessions + `HttpOnly; Secure; SameSite` cookies |
 | Golden rule | Don't roll your own crypto/auth protocol |
@@ -414,6 +517,15 @@ The IdP (Identity Provider) authenticates the user and issues a signed proof of 
 
 **Q: SAML or OpenID Connect?**
 Both do SSO with the same two roles. SAML uses XML assertions and is common in older enterprise apps. OIDC uses JSON/JWT ID tokens, works well with SPAs and mobile apps, and is the usual choice for new apps. Many IdPs support both.
+
+**Q: Which OIDC flow would you use for a React SPA? Why not Implicit?**
+Authorization Code with PKCE. The browser only receives a short-lived code, the tokens come over a back channel, and PKCE makes a stolen code useless. Implicit put the tokens directly in the URL, where they leak through history, logs and the `Referer` header, so it's deprecated. Even better for an SPA: let a BFF run the flow as a confidential client and give the browser only an HttpOnly session cookie.
+
+**Q: How does a backend service authenticate to another service?**
+With the Client Credentials flow: the service sends its own `client_id` and secret (or a certificate) to the IdP and gets an access token scoped to the target API. There's no user, so there's no ID token.
+
+**Q: What's the difference between `state` and `nonce`?**
+`state` is checked on the redirect back to the app, to make sure the response belongs to a login the app started (CSRF protection). `nonce` is placed inside the ID token, to make sure an old ID token can't be replayed.
 
 **Q: Why is SP-initiated login safer than IdP-initiated?**
 In SP-initiated login the SP starts the request (with a `state` / request ID), so it can check that the response belongs to a login it asked for. In IdP-initiated login the SP receives a proof it never requested, which makes replay and login-CSRF attacks harder to block.
