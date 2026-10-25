@@ -183,6 +183,72 @@ A JWT has **3 parts**, base64url-encoded and joined by dots: `xxxxx.yyyyy.zzzzz`
 
 ---
 
+## 💭 Step 4b: SP and IdP (the two sides of every SSO login)
+
+*(My addition: the video doesn't use these words, but you'll hear them in every SSO / enterprise login discussion.)*
+
+**Two roles, one job each:**
+
+| Role | Simple meaning | Examples |
+|---|---|---|
+| **IdP**: Identity Provider | The place that **checks who you are** and gives out the proof | Google, Microsoft Entra ID (Azure AD), Okta, Auth0, Keycloak |
+| **SP**: Service Provider | The **app you actually want to use**. It doesn't check passwords; it **trusts the IdP** | Your app, Slack, Jira, Salesforce |
+
+**Analogy: passport office and airport** 🛂 The **passport office (IdP)** checks your identity once and gives you a passport. The **airport (SP)** never checks your birth certificate: it only checks that the passport is **real** (signed by a country it trusts) and lets you board. Many airports trust the same passport, and many apps trust the same IdP: that's **Single Sign-On (SSO)**.
+
+**The login flow (SP-initiated, the common one):**
+
+```
+ User/Browser              ★ SP (your app)                    ★ IdP (e.g. Microsoft)
+     │                          │                                     │
+     │ ① open app.com           │                                     │
+     │ ───────────────────────► │ "not logged in"                     │
+     │ ◄─── ② redirect to IdP ──│                                     │
+     │ ──────────────────────────────────────────────────────────────►│
+     │                          │                  ③ login + MFA here  │
+     │                          │                    (password only    │
+     │                          │                     ever goes here)  │
+     │ ◄──── ④ signed proof: "this is alice@corp.com" ────────────────│
+     │ ───────────────────────► │ ⑤ verify signature with IdP's       │
+     │                          │   public key/cert, check aud + expiry│
+     │ ◄── ⑥ SP creates its OWN │                                     │
+     │     session 🍪           │                                     │
+```
+
+| Step | What's important |
+|---|---|
+| ③ | The **password is typed only at the IdP**. The SP never sees it |
+| ④ | The proof is **signed** by the IdP, so it can't be faked |
+| ⑤ | The SP checks the signature, that the proof is **for this SP** (audience) and that it **hasn't expired** |
+| ⑥ | After that the SP uses its **own session or tokens**, exactly like Step 6 ④ below |
+
+**Same roles, different names per protocol:**
+
+| Protocol | The "SP" is called | The "IdP" is called | The proof is |
+|---|---|---|---|
+| **SAML 2.0** (older, XML, very common in enterprises) | **SP** | **IdP** | A **SAML assertion** (signed XML), posted by the browser |
+| **OpenID Connect** | **Relying Party (RP)** / client | **OpenID Provider (OP)** | An **ID token** (a signed JWT) |
+| **OAuth 2.0** (not a login protocol) | **Client** | **Authorization server** (+ a resource server/API) | An **access token** |
+
+> So "SP and IdP" is mostly **SAML vocabulary**, but people use it for OIDC too. Same idea: **app** vs **who proves identity**.
+
+**Trust is set up once, before any login.** The SP and IdP exchange details:
+- **SAML:** a **metadata** XML file: the SP's entity ID and **ACS URL** (where the IdP sends the assertion) and the IdP's **signing certificate**.
+- **OIDC:** a `client_id` (+ secret for server apps), the allowed **redirect URI**, and the IdP's discovery document at `/.well-known/openid-configuration` (endpoints + public keys / JWKS).
+
+**Two ways to start a login:**
+
+| | SP-initiated | IdP-initiated |
+|---|---|---|
+| Starts at | Your app → redirect to the IdP | The IdP's app portal (e.g. Okta dashboard) → click the app tile |
+| Safety | ✅ Preferred: the SP knows it asked for this login | ⚠️ Riskier: the SP receives a proof it never asked for (harder to stop replay / login CSRF) |
+
+**Where is the SP in a React app?** Usually **your backend (or BFF)** is the SP / Relying Party: it receives the proof, validates it, and sets the session cookie. A pure SPA can be an OIDC client too (Authorization Code + PKCE), but it can't keep secrets.
+
+**Logout with SSO:** logging out of the SP ends **only the SP's session**. You're still logged in at the IdP, so the next login is instant. Logging out "everywhere" needs **Single Logout** (SAML SLO, or OIDC RP-initiated / front-/back-channel logout).
+
+---
+
 ## Step 5: compare them with 4 questions
 
 | Question | Sessions | JWT | OAuth |
@@ -316,6 +382,10 @@ The video focuses on server-rendered apps and mobile. For a **React SPA**, the c
 | OpenID Connect | Login/identity layer on top of OAuth 2.0 → ID token |
 | Access token vs ID token | API access vs "who logged in" |
 | PKCE | Required for public clients (SPAs, mobile) in the Authorization Code flow |
+| IdP (Identity Provider) | Checks who you are and issues signed proof (Google, Entra ID, Okta) |
+| SP (Service Provider) | The app you use; trusts the IdP's proof, never sees the password |
+| SSO | One IdP login, many SPs |
+| SAML vs OIDC names | SP/IdP + XML assertion vs RP/OP + ID token (JWT) |
 | Opaque token | Random string, checked by asking the auth server |
 | Default for web apps | Sessions + `HttpOnly; Secure; SameSite` cookies |
 | Golden rule | Don't roll your own crypto/auth protocol |
@@ -338,6 +408,15 @@ OAuth 2.0 is authorization: it gives an app scoped access to resources (access t
 
 **Q: What is PKCE and why is it needed?**
 Proof Key for Code Exchange. The client creates a secret `code_verifier`, sends its hash with the authorization request, and proves it knows the original when exchanging the code. An attacker who steals the authorization code can't use it. It's required for public clients like SPAs and mobile apps that can't keep a client secret.
+
+**Q: What are SP and IdP?**
+The IdP (Identity Provider) authenticates the user and issues a signed proof of identity, for example Microsoft Entra ID or Okta. The SP (Service Provider) is the application the user wants to use. It redirects to the IdP, verifies the signature, audience and expiry of the proof, and then creates its own session. The SP never sees the password, and one IdP can serve many SPs, which is what makes SSO work.
+
+**Q: SAML or OpenID Connect?**
+Both do SSO with the same two roles. SAML uses XML assertions and is common in older enterprise apps. OIDC uses JSON/JWT ID tokens, works well with SPAs and mobile apps, and is the usual choice for new apps. Many IdPs support both.
+
+**Q: Why is SP-initiated login safer than IdP-initiated?**
+In SP-initiated login the SP starts the request (with a `state` / request ID), so it can check that the response belongs to a login it asked for. In IdP-initiated login the SP receives a proof it never requested, which makes replay and login-CSRF attacks harder to block.
 
 **Q: Where should a web app store tokens?**
 Best: not in the browser at all (BFF pattern with an HttpOnly session cookie). Otherwise: access token in memory and refresh token in an `HttpOnly; Secure; SameSite` cookie. Avoid `localStorage`, because any XSS can read it.
