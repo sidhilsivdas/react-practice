@@ -110,6 +110,7 @@ The plan has two steps: **(1) authentication** first, **(2) role checks** on top
 ```
 
 ```tsx
+// components/AuthProvider.tsx (top of the file)
 type AuthContext = {
   authToken?: string | null
   currentUser?: User | null
@@ -149,6 +150,16 @@ const AuthContext = createContext<AuthContext | undefined>(undefined)
 import { getUser, login } from '@/api/auth'
 import { User } from '@/types/user'
 import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react'
+
+// from Step 1
+type AuthContext = {
+  authToken?: string | null
+  currentUser?: User | null
+  handleLogin: () => Promise<void>
+  handleLogout: () => Promise<void>
+}
+
+const AuthContext = createContext<AuthContext | undefined>(undefined)
 
 type AuthProviderProps = PropsWithChildren
 
