@@ -103,6 +103,7 @@ import tsClassesEnums from '../questions/ts-classes-enums.md?raw'
 import tsReact from '../questions/ts-react.md?raw'
 import tsTsconfigTooling from '../questions/ts-tsconfig-tooling.md?raw'
 import tsInterviewQuestions from '../questions/ts-interview-questions.md?raw'
+import tsYtReactAssemblyEndgame from '../questions/ts-yt-react-assembly-endgame.md?raw'
 import nxWhatWhy from '../questions/nx-what-why.md?raw'
 import nxVersionsTrends from '../questions/nx-versions-trends.md?raw'
 import nxSsrIsr from '../questions/nx-ssr-isr-deep-dive.md?raw'
@@ -817,6 +818,12 @@ const questions = [
     title: "TypeScript rapid-fire interview questions",
     category: 'typescript',
     content: tsInterviewQuestions,
+  },
+  {
+    id: 'ts-yt-react-assembly-endgame',
+    title: 'TypeScript in React: typing a real app (video notes: freeCodeCamp)',
+    category: 'typescript',
+    content: tsYtReactAssemblyEndgame,
   },
   {
     id: 'nx-what-why',
