@@ -17,7 +17,7 @@
 - **OAuth** = you give the cleaning company a **key card that only opens your room** for today, instead of giving them your master key (your password).
 - **OIDC** = the hotel accepts your **passport from another country** (Google) to prove who you are.
 
-> 📺 Notes from the video **"Stop Choosing JWT by Default! Sessions vs JWT vs OAuth Explained"** by Time To Program, plus extra notes of mine marked **💭 My thoughts**. For a full production design (refresh token rotation, Redis sessions, Microsoft SSO), see the System Design → Backend note **"Auth for React + NestJS on Kubernetes"**.
+> 📺 Notes from the video **"Stop Choosing JWT by Default! Sessions vs JWT vs OAuth Explained"** by Time To Program, plus extra notes of mine marked **💭 My thoughts**. Related pages: **"Role-based authentication & protected routes"** (the React side: `AuthProvider` + `ProtectedRoute`) and, for a full production design (refresh token rotation, Redis sessions, Microsoft SSO), the System Design → Backend page **"Auth for React + NestJS on Kubernetes"**.
 
 ---
 

@@ -440,6 +440,8 @@ Adding a new role is then one line, not a search through the whole codebase. Eve
 
 A common production setup: an `httpOnly` refresh cookie, plus a short-lived access token in memory, and `GET /me` on page load (exactly Step 4).
 
+For **sessions vs JWT vs OAuth / OpenID Connect** and which one to pick, see the next page: **"Auth flow: Sessions vs JWT vs OAuth vs OpenID Connect"**.
+
 ### 6. Small improvements to the video's code
 
 - **Memoise the context value** (`useMemo`, plus `useCallback` for the handlers), so every consumer doesn't re-render whenever the provider re-renders.

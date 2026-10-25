@@ -92,7 +92,7 @@ import sdAuthTokens from '../questions/sd-be-auth-tokens-sessions.md?raw'
 import sdYtAmazon from '../questions/sd-yt-amazon-flipkart.md?raw'
 import sdYtTicketmaster from '../questions/sd-yt-ticketmaster.md?raw'
 import sdYtUber from '../questions/sd-yt-uber.md?raw'
-import sdYtSessionsJwtOauth from '../questions/sd-yt-sessions-jwt-oauth.md?raw'
+import fa00AuthSessionsJwtOauth from '../questions/fa-00-auth-sessions-jwt-oauth.md?raw'
 import tsWhatWhy from '../questions/ts-what-why.md?raw'
 import tsBasicTypes from '../questions/ts-basic-types.md?raw'
 import tsInterfaceVsType from '../questions/ts-interface-vs-type.md?raw'
@@ -647,17 +647,16 @@ const questions = [
     content: sdYtUber,
   },
   {
-    id: 'sd-yt-sessions-jwt-oauth',
-    title: 'Sessions vs JWT vs OAuth vs OpenID Connect (video notes: Time To Program)',
-    category: 'system-design',
-    section: 'youtube',
-    content: sdYtSessionsJwtOauth,
-  },
-  {
     id: 'fa-00-role-based-auth',
     title: 'Role-based authentication & protected routes (video notes: Cosden Solutions)',
     category: 'frontend-architecture',
     content: fa00RoleBasedAuth,
+  },
+  {
+    id: 'fa-00-auth-sessions-jwt-oauth',
+    title: 'Auth flow: Sessions vs JWT vs OAuth vs OpenID Connect (video notes: Time To Program)',
+    category: 'frontend-architecture',
+    content: fa00AuthSessionsJwtOauth,
   },
   {
     id: 'fa-react-redux-architecture',
