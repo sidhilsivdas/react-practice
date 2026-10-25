@@ -43,8 +43,52 @@ The video uses a **mock backend**: `getUser()` and `login()` wait 1 second, then
 
 ```ts
 // types/user.ts
-export type User = { id: number; email: string; role: 'admin' | 'viewer' }
+export type User = {
+  id: number;
+  email: string;
+  role: string;   // a plain string in the video (see 💭 tip below)
+};
 ```
+
+```ts
+// api/auth.ts: the mock backend
+import { User } from '@/types/user';
+
+const testUser: User = {
+  id: 1,
+  email: 'test@email.com',
+  role: 'admin',
+};
+
+export async function getUser() {
+  await new Promise((resolve) => setTimeout(resolve, 1000)); // fake 1s network delay
+
+  const authToken = generateAuthToken();
+
+  return [200, { authToken, user: testUser }] as const;      // [status, body]
+}
+
+export async function login() {
+  // exactly the same code as getUser()
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  const authToken = generateAuthToken();
+
+  return [200, { authToken, user: testUser }] as const;
+}
+
+function generateAuthToken() {
+  return Math.random().toString(36).substring(2);              // random fake token
+}
+```
+
+| Detail | Why it matters |
+|---|---|
+| `[200, {...}] as const` | A **readonly tuple**: TypeScript knows `response[1]` is `{ authToken, user }`, so destructuring it later is fully typed |
+| `getUser()` and `login()` are identical | In a real app: `getUser` = "who am I?" (`GET /me`), `login` = send credentials |
+| `role: string` | Any string is accepted. See the 💭 tip below for a safer version |
+
+> 💭 **My tip:** make `role` a union: `role: 'admin' | 'viewer'`. Then `allowedRoles={['admn']}` (a typo) becomes a **type error** instead of a silent "Permission denied".
 
 The plan has two steps: **(1) authentication** first, **(2) role checks** on top.
 
@@ -101,6 +145,11 @@ const AuthContext = createContext<AuthContext | undefined>(undefined)
 ```
 
 ```tsx
+// components/AuthProvider.tsx
+import { getUser, login } from '@/api/auth'
+import { User } from '@/types/user'
+import { createContext, PropsWithChildren, useContext, useEffect, useState } from 'react'
+
 type AuthProviderProps = PropsWithChildren
 
 export default function AuthProvider({ children }: AuthProviderProps) {
@@ -147,10 +196,21 @@ export function useAuth() {
 </AuthProvider>
 
 // App.tsx: use it
-const { authToken, handleLogin, handleLogout } = useAuth()
-return authToken
-  ? <button onClick={handleLogout}>Logout</button>
-  : <button onClick={handleLogin}>Login</button>
+export default function App() {
+  const { authToken, handleLogin, handleLogout } = useAuth()
+
+  return (
+    <div className="flex flex-col">
+      <h1 className="text-2xl font-bold">Cosden Solutions</h1>
+      <Link to="/protected">Protected Route</Link>   {/* added in Step 3 */}
+      {authToken ? (
+        <button onClick={handleLogout}>Logout</button>
+      ) : (
+        <button onClick={handleLogin}>Login</button>
+      )}
+    </div>
+  )
+}
 ```
 
 | What's new | Why |
@@ -158,6 +218,7 @@ return authToken
 | `useState<User \| null>()` with no initial value | Starts as `undefined`: "we don't know yet" |
 | `catch` sets `null` | The rest of the app learns "we checked, not logged in" |
 | `useAuth()` throws outside the provider | A clear error instead of silent `undefined` bugs |
+| `handleLogout` is `async` with no `await` | Only because the type says `Promise<void>`. In a real app it would call a logout API |
 
 **The bug in the video:** he forgot to wrap the app in `<AuthProvider>`, and the page showed *"useAuth must be used inside of a AuthProvider"*. That error is exactly why the guard hook exists: you find the mistake in one second.
 
@@ -178,6 +239,11 @@ return authToken
 ```
 
 ```tsx
+// components/ProtectedRoute.tsx
+import { User } from '@/types/user'
+import { PropsWithChildren } from 'react'
+import { useAuth } from './AuthProvider'
+
 type ProtectedRouteProps = PropsWithChildren & {
   allowedRoles?: User['role'][]
 }
@@ -212,7 +278,7 @@ export default function ProtectedRoute({ allowedRoles, children }: ProtectedRout
 | What's new | Why |
 |---|---|
 | `allowedRoles?` is optional | Leave it out to require login only, with no role check |
-| `User['role'][]` | Indexed access type: only real roles (`'admin' \| 'viewer'`) are accepted |
+| `User['role'][]` | Indexed access type: "an array of whatever type `role` is". In the video that's `string[]`; with the union tip from Step 0 it becomes `('admin' \| 'viewer')[]` and typos are caught |
 | Check `undefined` **first** | Never show "denied" while we're still checking |
 | Uses `useAuth()`, not its own state | **Single responsibility**: it reads auth, it doesn't do auth |
 
@@ -250,6 +316,7 @@ useEffect(() => {
 
 **Demo results from the video:**
 
+- *(Before Step 4)* Login → **Protected content** ✅; Logout → **Permission denied** 🚫; reload → **Loading... forever** ⏳
 - Role `admin` + `allowedRoles={['admin']}` → Loading... → **Protected content** ✅
 - Role changed to `viewer` → Loading... → **Permission denied** 🚫
 - `allowedRoles={['admin', 'viewer']}` → **Protected content** ✅
@@ -300,6 +367,8 @@ Browser (React)                     Server (API)
 In a real app with React Router, send logged-out users to the login page and remember where they wanted to go:
 
 ```tsx
+const location = useLocation()   // from react-router-dom
+
 if (currentUser === null) {
   return <Navigate to="/login" replace state={{ from: location }} />
 }
@@ -316,7 +385,7 @@ if (allowedRoles && !allowedRoles.includes(currentUser.role)) {
 Instead of wrapping every page, use `<Outlet />`:
 
 ```tsx
-function ProtectedRoute({ allowedRoles }: { allowedRoles?: Role[] }) {
+function ProtectedRoute({ allowedRoles }: { allowedRoles?: User['role'][] }) {
   // ...same checks...
   return <Outlet />
 }
@@ -333,12 +402,15 @@ function ProtectedRoute({ allowedRoles }: { allowedRoles?: Role[] }) {
 `role === 'admin'` checks spread everywhere and become hard to change. Bigger apps map roles to **permissions** and check those:
 
 ```ts
-const PERMISSIONS = {
+type Role = 'admin' | 'viewer'
+type Permission = 'users:read' | 'users:edit' | 'billing:read'
+
+const PERMISSIONS: Record<Role, Permission[]> = {
   admin:  ['users:read', 'users:edit', 'billing:read'],
   viewer: ['users:read'],
-} as const
+}
 
-function can(user: User, permission: string) {
+function can(user: { role: Role }, permission: Permission) {
   return PERMISSIONS[user.role].includes(permission)
 }
 
